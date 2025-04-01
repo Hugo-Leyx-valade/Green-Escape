@@ -4,7 +4,7 @@ WIDTH = 15  # Largeur du labyrinthe (doit être impair).
 HEIGHT = 15  # Hauteur du labyrinthe (doit être impair).
 assert WIDTH % 2 == 1 and WIDTH >= 3
 assert HEIGHT % 2 == 1 and HEIGHT >= 3
-SEED = 3
+SEED = random.randint(1, 10**6)
 random.seed(SEED)
 
 # Utiliser ces caractères pour afficher le labyrinthe :
@@ -19,17 +19,14 @@ for x in range(WIDTH):
     for y in range(HEIGHT):
         maze[(x, y)] = WALL  # Chaque espace est un mur au début.
 
-def printMaze(maze, entreance=None, exit=None):
-    """Affiche la structure de données du labyrinthe dans l'argument maze. Les
-    arguments markX et markY sont les coordonnées de l'emplacement actuel
-    '@' de l'algorithme lorsqu'il génère le labyrinthe."""
-
+def printMaze(maze, entrance=None, exit=None):
+    """Affiche la structure de données du labyrinthe dans l'argument maze."""
     for y in range(HEIGHT):
         for x in range(WIDTH):
-            if entrance[0] == x and entrance[1] == y:
+            if entrance and entrance[0] == x and entrance[1] == y:
                 # Afficher le marqueur '@' ici :
-                print(MARK, end='')
-            if exit[0] == x and exit[1] == y:
+                print('@', end='')
+            elif exit and exit[0] == x and exit[1] == y:
                 # Afficher le marqueur '#' ici :
                 print('#', end='')
             else:
@@ -148,8 +145,8 @@ visit(1, 1)
 # Créer une entrée et une sortie dans le labyrinthe
 entrance, exit_point = createEntranceAndExit(maze, WIDTH, HEIGHT)
 
-# Afficher la structure de données du labyrinthe final avec l'entrée marquée
-printMaze(maze, entrance,exit_point)
+# Afficher la structure de données du labyrinthe final avec l'entrée et la sortie marquées
+printMaze(maze, entrance, exit_point)
 
 # Convertir le labyrinthe en un tableau 2D avec les intersections marquées
 mazeArrayWithIntersections = mazeToArrayWithIntersections(maze)
@@ -161,3 +158,4 @@ for row in mazeArrayWithIntersections:
 # Afficher les coordonnées de l'entrée et de la sortie
 print("Entrée :", entrance)
 print("Sortie :", exit_point)
+print("La seed est :", SEED)

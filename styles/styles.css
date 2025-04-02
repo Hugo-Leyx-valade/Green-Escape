@@ -61,11 +61,49 @@ header{
 }
 
 .scoresDiv {
-   grid-area: 2 / 6 / 6 / 7;
+   grid-area: 2 / 5 / 6 / 7;
+   background-image: url('../images/scoreBG.png');
+   background-position: center;
+   background-size: 75%;
+   background-repeat: no-repeat;
    height:500px;
-   border: 2px solid black;
    text-align: center;
    margin-right:5%;
+}
+
+.scoresDiv h1{
+  color: #5c4161;
+  text-shadow: 1px 1px 2px #f0f0f0;
+}
+
+.scoreEntry {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 8px;
+  padding: 8px 12px;
+  padding-left: 20%;
+  margin: 8px 0;
+  font-size: 1.2em;
+  text-shadow: 1px 1px 2px black;
+  width: 50%;
+}
+
+.scoreEntry .rank {
+  font-weight: bold;
+  margin-right: 10px;
+  color: gold;
+  padding-left: 10%;
+}
+
+.scoreEntry .algo {
+  flex-grow: 1;
+  text-align: center;
+  color: #f0f0f0;
+}
+
+.scoreEntry .time {
+  font-family: monospace;
 }
 
 .replayButtonDiv{

@@ -1,6 +1,7 @@
 from django.urls import path
-from .views import home
+from . import views
 
 urlpatterns = [
-    path('', home),  # Route principale de l'API
+    path('register/', views.register, name='register'),
+ # Rediriger vers une page de succès après l'inscription
 ]

@@ -1,0 +1,30 @@
+# 🐍 Environnement virtuel
+env/
+venv/
+ENV/
+.venv/
+
+# 🧠 Fichiers de config perso
+*.pyc
+__pycache__/
+*.pyo
+*.pyd
+*.log
+
+# 🛠 Django
+db.sqlite3
+*.sqlite3
+*.db
+
+# 📦 VSCode
+.vscode/
+
+# 💣 Fichiers système
+.DS_Store
+Thumbs.db
+
+# 🌐 Frontend
+node_modules/
+
+# 🌍 Environnement
+.env

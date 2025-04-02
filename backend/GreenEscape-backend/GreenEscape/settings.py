@@ -12,21 +12,12 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 
 from pathlib import Path
 import os
-from mongoengine import connect
-import djongo
 
+os.chdir(r"C:\Users\hugol\Documents\Projets\projet-green-escape\Green-Escape\backend\GreenEscape-backend")
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-connect(
-    db='green_escape_db',  # Le nom de ta base de données dans MongoDB Atlas
-    username='green-escape',  # Ton nom d'utilisateur MongoDB Atlas
-    password='XzQT5qT9tmrJPCoW',  # Ton mot de passe MongoDB Atlas
-    host='mongodb+srv://green-escape:XzQT5qT9tmrJPCoW@cluster0.e8i7yml.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0',  # URL de ton cluster MongoDB Atlas
-    authentication_source='admin',  # (Optionnel) La base pour l'authentification
-    retryWrites=True  # Recommandé pour la résilience des écritures
-)
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
@@ -50,6 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'api',  # Ajoute ici notre application API
+    'corsheaders',
 ]
 
 MIDDLEWARE = [
@@ -60,6 +52,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
+    'django.middleware.common.CommonMiddleware',
 ]
 
 ROOT_URLCONF = 'GreenEscape.urls'
@@ -141,3 +135,5 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+CORS_ALLOW_ALL_ORIGINS = True

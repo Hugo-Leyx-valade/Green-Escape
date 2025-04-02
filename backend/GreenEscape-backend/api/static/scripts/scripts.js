@@ -39,9 +39,9 @@ document.addEventListener("DOMContentLoaded", () => {
             const img = document.createElement("img");
   
             if (cell === 1) {
-              img.src = "../images/mur.png";
+              img.src = '../../static/images/mur.png';
             } else {
-              img.src = "../images/sol.png";
+              img.src = "../../static/images/sol.png";
             }
   
             img.style.width = "20px";

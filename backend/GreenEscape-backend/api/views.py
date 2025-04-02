@@ -23,7 +23,7 @@ def register(request):
         new_user = User(username=username, email=email, password=hashed_password)
         new_user.save()
 
-    return render(request, 'register.html')  # Page d'inscription
+    return render(request, 'views/register.html')  # Page d'inscription
 
 
 def generate_maze_view(request):

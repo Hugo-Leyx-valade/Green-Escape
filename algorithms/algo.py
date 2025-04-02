@@ -89,7 +89,6 @@ def mazeToArrayWithIntersections(maze):
         array.append(row)
     return array
 
-# ✅ Fonction principale à utiliser depuis Django ----------------------
 
 def generate_maze(seed):
     random.seed(seed)

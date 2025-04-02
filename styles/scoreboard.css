@@ -1,0 +1,82 @@
+.scoreboardContainer {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    grid-template-rows: repeat(6, auto);
+    grid-gap: 20px;
+    padding: 20px;
+}
+
+.scoreboardHeader {
+    grid-area: 1 / 2 / 2 / 6;
+    text-align: center;
+}
+
+.scoreboardTable {
+    grid-area: 2 / 2 / 6 / 6;
+    background-color: rgba(89, 187, 97, 0.1);
+    border-radius: 10px;
+    padding: 20px;
+}
+
+.scoreTable {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0 10px;
+}
+
+.scoreTable th {
+    background-color: rgb(89, 187, 97);
+    color: white;
+    padding: 10px;
+    text-align: left;
+}
+
+.scoreTable td {
+    background-color: white;
+    padding: 10px;
+    border-bottom: 2px solid rgb(89, 187, 97);
+}
+
+.scoreTable tr:nth-child(even) td {
+    background-color: rgba(89, 187, 97, 0.05);
+}
+
+.scoreTable tr:nth-child(odd) td {
+    background-color: rgba(89, 187, 97, 0.1);
+}
+
+.scoreTable .rank-1 {
+    background-color: gold !important;
+    background: linear-gradient(
+    135deg,
+    #FFD700 0%,
+    #FFEC8B 50%,
+    #FFD700 100%
+    ) !important;
+    font-weight: bold;
+    color: #333;
+    }
+    
+    .scoreTable .rank-2 {
+    background-color: silver !important;
+    background: linear-gradient(
+    135deg,
+    #C0C0C0 0%,
+    #E6E6FA 50%,
+    #C0C0C0 100%
+    ) !important;
+    font-weight: bold;
+    color: #333;
+    }
+    
+    .scoreTable .rank-3 {
+    background-color: #CD7F32 !important;
+    background: linear-gradient(
+    135deg,
+    #CD7F32 0%,
+    #DEB887 50%,
+    #CD7F32 100%
+    ) !important;
+    font-weight: bold;
+    color: #333;
+    }

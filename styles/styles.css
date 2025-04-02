@@ -1,6 +1,6 @@
 body {
     font-family: "Jersey 15", sans-serif;
-    background-color: #f0f0f0;
+    background-color: #f0f2f5;
     text-shadow: 1px 1px 1px rgb(95, 60, 14);
     letter-spacing: 2px;
     color:rgb(89, 187, 97);
@@ -9,6 +9,11 @@ body {
 header{
   font-size:200%;
   height:100px;
+}
+
+a{
+  text-decoration: none;
+  color: rgb(89, 187, 97);
 }
 
 .a:hover{

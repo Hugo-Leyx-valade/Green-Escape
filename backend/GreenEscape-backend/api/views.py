@@ -41,4 +41,4 @@ def generate_maze_view(request):
 
 
 def play_screen(request):
-    return render(request,'index.html')
+    return render(request,'views/index.html')

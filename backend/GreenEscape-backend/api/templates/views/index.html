@@ -3,7 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <title>Mon Projet</title>
-  <link rel="stylesheet" href="../styles/styles.css">
+  {% load static %}
+  <link rel="stylesheet" href="{% static 'myapp/css/styles.css' %}">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Jersey+15&display=swap" rel="stylesheet">
@@ -30,7 +31,6 @@
       
     </div>
   </header>
-
   <div class="parentGame">
     <div class="gameDiv">
       <h1>Jeu</h1>

@@ -12,11 +12,21 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 
 from pathlib import Path
 import os
-import sys
+from mongoengine import connect
+import djongo
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+connect(
+    db='green_escape_db',  # Le nom de ta base de données dans MongoDB Atlas
+    username='green-escape',  # Ton nom d'utilisateur MongoDB Atlas
+    password='XzQT5qT9tmrJPCoW',  # Ton mot de passe MongoDB Atlas
+    host='mongodb+srv://green-escape:XzQT5qT9tmrJPCoW@cluster0.e8i7yml.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0',  # URL de ton cluster MongoDB Atlas
+    authentication_source='admin',  # (Optionnel) La base pour l'authentification
+    retryWrites=True  # Recommandé pour la résilience des écritures
+)
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
@@ -57,7 +67,7 @@ ROOT_URLCONF = 'GreenEscape.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'GreenEscape/templates')],  # Chemin vers ton dossier de templates
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -80,13 +90,15 @@ WSGI_APPLICATION = 'GreenEscape.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'djongo',
-        'NAME': 'backend_db',  # Nom de ta base de données MongoDB
+        'NAME': 'GreenEscape_db',  # Remplacez par le nom de votre base de données
         'ENFORCE_SCHEMA': False,
         'CLIENT': {
-            'host': 'mongodb+srv://green-escape:XzQT5qT9tmrJPCoW@cluster0.e8i7yml.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0',  # URL de connexion à MongoDB
-        },
+            'host': 'mongodb+srv://admin:admin@cluster0.e8i7yml.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0'
+        }
     }
 }
+
+
 
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators

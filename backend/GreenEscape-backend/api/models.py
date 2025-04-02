@@ -6,6 +6,7 @@ class User(models.Model):
     password = models.CharField(max_length=255)  # Utilise un hachage pour les mots de passe en production
     name = models.CharField(max_length=255, blank=True)
     games_played = models.IntegerField(default=0)  # Par exemple, pour stocker le nombre de parties jouées
+    role = models.IntegerField(default=0) #0 == user 1 == admin
 
     def __str__(self):
         return self.username

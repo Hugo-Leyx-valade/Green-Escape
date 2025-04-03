@@ -1,6 +1,6 @@
 
 document.addEventListener("DOMContentLoaded", () => {
-  const replayButton = document.querySeletor(".button");
+  const replayButton = document.querySelector(".button");
   const seedInput = document.querySelector("#seed");
   const gameDiv = document.querySelector(".gameDiv");
   const scoresDiv = document.querySelector(".scoresDiv");
@@ -42,7 +42,7 @@ document.addEventListener("DOMContentLoaded", () => {
           const cellDiv = document.createElement("div");
           const img = document.createElement("img");
 
-          img.src = cell === 1 ? "../images/mur.png" : "../images/sol.png";
+          img.src = cell === 1 ? "../static/images/mur.png" : "../static/images/sol.png";
           img.style.width = "20px";
           img.style.height = "20px";
 
@@ -70,7 +70,7 @@ document.addEventListener("DOMContentLoaded", () => {
         
           const timing = document.createElement("span");
           timing.classList.add("time");
-          timing.textContent = `${time.toFixed(5)*50000} s`;
+          timing.textContent = `${time.toFixed(2)*50000} s`;
         
           entry.appendChild(rank);
           entry.appendChild(name);

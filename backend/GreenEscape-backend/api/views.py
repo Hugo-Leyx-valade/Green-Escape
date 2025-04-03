@@ -1,19 +1,17 @@
 from rest_framework import generics
 from api.models import User
 from django.http import JsonResponse
-<<<<<<< HEAD
+
 from django.shortcuts import render, redirect
 from django.contrib.auth.hashers import make_password
 from .models import User
 from api.algorithms import algo
-=======
+from api.algorithms import solvers
+
 import sys, os
 
 sys.path.append(os.path.join(os.path.dirname(__file__), '../../../algorithms'))
 
-import algo
-import solvers
->>>>>>> origin/main
 
 def home(request):
     return JsonResponse({"message": "Bienvenue sur l'API Green Escape"})
@@ -34,10 +32,7 @@ def register(request):
 
     return render(request, 'views/register.html')  # Page d'inscription
 
-<<<<<<< HEAD
 
-=======
->>>>>>> origin/main
 def generate_maze_view(request):
     seed = request.GET.get('seed')
     if not seed:

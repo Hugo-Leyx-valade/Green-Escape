@@ -1,0 +1,78 @@
+.profileContainer {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    grid-template-rows: repeat(6, 1fr);
+    grid-column-gap: 0px;
+    grid-row-gap: 20px;
+    padding: 20px;
+}
+
+.profileHeader {
+    grid-area: 1 / 2 / 2 / 6;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.profileAvatar {
+    grid-area: 2 / 3 / 4 / 5;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.profileAvatar img {
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    border: 3px solid rgb(89, 187, 97);
+    object-fit: cover;
+}
+
+.profileStats {
+    grid-area: 4 / 2 / 6 / 6;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+}
+
+.statCard {
+    border: 2px solid rgb(89, 187, 97);
+    border-radius: 10px;
+    padding: 15px;
+    text-align: center;
+    background-color: rgba(89, 187, 97, 0.1);
+}
+
+.statCard h3 {
+    color: rgb(89, 187, 97);
+    margin-bottom: 10px;
+    font-size: 2em;
+}
+
+.statCard p {
+    font-size: 1.5em;
+}
+
+.profileActions {
+    grid-area: 6 / 3 / 7 / 5;
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+}
+
+.editProfileButton {
+    background-color: rgb(89, 187, 97);
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-family: "Jersey 15", sans-serif;
+    letter-spacing: 2px;
+    transition: background-color 0.3s ease;
+}
+
+.editProfileButton:hover {
+    background-color: #2e8b57;
+}

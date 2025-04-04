@@ -5,41 +5,89 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Connexion</title>
-    <link rel="stylesheet" href="{% static 'css/register.css' %}">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #F0F0F0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .container {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        h2 {
+            color: #00FF00;
+        }
+        input {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        button {
+            background: #00FF00;
+            border: none;
+            padding: 10px 15px;
+            color: white;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background: #00CC00;
+        }
+        p {
+            margin-top: 10px;
+        }
+    </style>
 </head>
 <body>
-    <h2>Connexion</h2>
-    <form id="loginForm">
-        <label for="username">Nom d'utilisateur</label>
-        <input type="text" id="username" name="username" required>
-
-        <label for="password">Mot de passe</label>
-        <input type="password" id="password" name="password" required>
-
-        <button type="submit">Se connecter</button>
-    </form>
-
-    <p id="errorMessage" style="color: red;"></p>
+    <div class="container">
+        <h2>Connexion</h2>
+        <form id="loginForm">
+            <input type="text" id="username" placeholder="Nom d'utilisateur" required>
+            <input type="password" id="password" placeholder="Mot de passe" required>
+            <button type="submit">Se connecter</button>
+        </form>
+        <p>Pas encore de compte ? <button id="register">S'inscrire</button></p>
+        <p id="errorMessage" style="color: red;"></p>
+    </div>
 
     <script>
+        document.getElementById("register").addEventListener("click", function () {
+            window.location.href = "/api/register-page/";
+        });
+
         document.getElementById("loginForm").addEventListener("submit", async function(event) {
             event.preventDefault();
 
             const username = document.getElementById("username").value;
             const password = document.getElementById("password").value;
 
-            const response = await fetch("/api/login/", {  // Ajoute un "/" devant api
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ username, password })
-            });
+            try {
+                const response = await fetch("/api/login/", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ username, password })
+                });
 
-            const result = await response.json();
+                const result = await response.json();
 
-            if (response.ok) {
-                window.location.href = "/";  // Redirige vers le dashboard après connexion
-            } else {
-                document.getElementById("errorMessage").textContent = result.error;  // Affiche l'erreur si connexion échouée
+                if (response.ok) {
+                    window.location.href = "/";  // Redirige vers la page principale après connexion
+                } else {
+                    document.getElementById("errorMessage").textContent = result.error;  // Affiche l'erreur si échec
+                }
+            } catch (error) {
+                console.error("Erreur lors de la connexion :", error);
+                document.getElementById("errorMessage").textContent = "Erreur de connexion. Réessayez.";
             }
         });
     </script>

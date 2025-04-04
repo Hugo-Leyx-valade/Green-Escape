@@ -43,8 +43,8 @@ INSTALLED_APPS = [
 ]
 
 LOGIN_REDIRECT_URL = "/"  # Change vers ta page principale
-LOGOUT_REDIRECT_URL = "/auth-page/"
-LOGIN_URL = "/auth-page/"
+LOGOUT_REDIRECT_URL = "/login/"
+LOGIN_URL = "/login/"
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',

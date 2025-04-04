@@ -3,25 +3,68 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <link rel="stylesheet" href="{% static 'css/register.css' %}">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Inscription</title>
+    <title>Connexion</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #F0F0F0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .container {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        h2 {
+            color: #00FF00;
+        }
+        input {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        button {
+            background: #00FF00;
+            border: none;
+            padding: 10px 15px;
+            color: white;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background: #00CC00;
+        }
+        p {
+            margin-top: 10px;
+        }
+    </style>
 </head>
 <body>
     <div class="container">
         <h2>Inscription</h2>
         <form id="registerForm">
-            <label for="username">Nom d'utilisateur</label>
-            <input type="text" id="username" name="username" required>
-
-            <label for="password">Mot de passe</label>
-            <input type="password" id="password" name="password" required>
-
+            <input type="text" id="username" placeholder="Nom d'utilisateur" required>
+            <input type="password" id="password" placeholder="Mot de passe" required>
             <button type="submit">S'inscrire</button>
         </form>
-        <p id="message"></p>
+        <p>Vous avez déjà un compte ? <button id="register">Se connecter</button></p>
+        <p id="errorMessage" style="color: red;"></p>
     </div>
+
     <script>
+        document.getElementById("register").addEventListener("click", function () {
+            window.location.href = "/api/login-page/";
+        });
+
         document.getElementById("registerForm").addEventListener("submit", async function(event) {
             event.preventDefault();  // Empêche la soumission classique du formulaire
 
@@ -37,15 +80,16 @@
             const result = await response.json();
             const message = document.getElementById("message");
             if (response.ok) {
-                message.textContent = result.message;
-                message.style.color = "green";
+                const response = await fetch("/api/login/", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ username, password })
+                });
                 window.location.href = "/"
             } else {
-                message.textContent = result.error;
-                message.style.color = "red";
+                alert("le nom d'utilisateur est déjà utilisé")
             }
         });
     </script>
 </body>
 </html>
-

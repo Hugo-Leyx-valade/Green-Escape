@@ -12,6 +12,7 @@
 </head>
 
 <body>
+  {% if user.is_authenticated %}
   <header>
     <div class="parentHeader">
       <div class="logoHeader">
@@ -42,5 +43,6 @@
     </div>
   </div>
   <footer>Green Escape, All Rights Reserved® - 2025</footer>
+  {% endif %}
 </body>
 </html>

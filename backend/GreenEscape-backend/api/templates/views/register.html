@@ -1,13 +1,51 @@
-<form method="POST">
-    {% csrf_token %}
-    <label for="username">Nom d'utilisateur :</label>
-    <input type="text" name="username" required><br>
+{% load static %}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="{% static 'css/register.css' %}">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inscription</title>
+</head>
+<body>
+    <div class="container">
+        <h2>Inscription</h2>
+        <form id="registerForm">
+            <label for="username">Nom d'utilisateur</label>
+            <input type="text" id="username" name="username" required>
 
-    <label for="email">Email :</label>
-    <input type="email" name="email" required><br>
+            <label for="password">Mot de passe</label>
+            <input type="password" id="password" name="password" required>
 
-    <label for="password">Mot de passe :</label>
-    <input type="password" name="password" required><br>
+            <button type="submit">S'inscrire</button>
+        </form>
+        <p id="message"></p>
+    </div>
+    <script>
+        document.getElementById("registerForm").addEventListener("submit", async function(event) {
+            event.preventDefault();  // Empêche la soumission classique du formulaire
 
-    <button type="submit">S'inscrire</button>
-</form>
+            const username = document.getElementById("username").value;
+            const password = document.getElementById("password").value;
+
+            const response = await fetch("/api/register/", {  // <-- Ajoute "api/"
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ username, password })
+            });
+
+            const result = await response.json();
+            const message = document.getElementById("message");
+            if (response.ok) {
+                message.textContent = result.message;
+                message.style.color = "green";
+                window.location.href = "/"
+            } else {
+                message.textContent = result.error;
+                message.style.color = "red";
+            }
+        });
+    </script>
+</body>
+</html>
+

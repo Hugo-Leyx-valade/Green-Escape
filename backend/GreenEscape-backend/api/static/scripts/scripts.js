@@ -24,7 +24,6 @@ document.addEventListener("DOMContentLoaded", () => {
       console.log("Maze reçu !! :", maze);
       console.log("scores : ", data.scores) 
       console.log('je suis ici');
-
       // 3. Réinitialiser l'affichage du labyrinthe
       gameDiv.innerHTML = "";
 
@@ -70,7 +69,7 @@ document.addEventListener("DOMContentLoaded", () => {
         
           const timing = document.createElement("span");
           timing.classList.add("time");
-          timing.textContent = `${time.toFixed(2)*50000} s`;
+          timing.textContent = `${time.toFixed(7)*50000} s`;
         
           entry.appendChild(rank);
           entry.appendChild(name);

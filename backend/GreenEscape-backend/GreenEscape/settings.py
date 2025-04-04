@@ -42,6 +42,9 @@ INSTALLED_APPS = [
     'corsheaders',
 ]
 
+LOGIN_REDIRECT_URL = "/dashboard/"  # Change vers ta page principale
+LOGOUT_REDIRECT_URL = "/login/"
+
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -52,7 +55,6 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
-
 ]
 
 SESSION_ENGINE = 'django.contrib.sessions.backends.db'
@@ -63,7 +65,8 @@ STATIC_URL = '/static/'
 
 STATICFILES_DIRS = [BASE_DIR / "static"]
 
-LOGIN_REDIRECT_URL = "/"  # new
+AUTH_USER_MODEL = "api.CustomUser"
+
 
 TEMPLATES = [
     {
@@ -82,7 +85,7 @@ TEMPLATES = [
 ]
 
 
-WSGI_APPLICATION = 'GreenEscape.wsgi.application'
+WSGI_APPLICATION = "GreenEscape.wsgi.application"
 
 
 # Database

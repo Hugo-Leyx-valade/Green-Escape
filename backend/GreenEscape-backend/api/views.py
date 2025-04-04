@@ -50,11 +50,13 @@ def register(request):
 @csrf_exempt
 def login_view(request):
     if request.method == "POST":
-        # Récupération des données envoyées
-        username = request.POST.get("username")
-        password = request.POST.get("password")
+        try:
+            data = json.loads(request.body)  # Récupérer JSON envoyé
+            username = data.get("username")
+            password = data.get("password")
+        except json.JSONDecodeError:
+            return JsonResponse({"error": "Requête invalide"}, status=400)
 
-        # Authentifier l'utilisateur
         user = authenticate(request, username=username, password=password)
 
         if user is not None:
@@ -67,13 +69,13 @@ def login_view(request):
 
 
 
-def logout_view(request):
-        logout(request)
-        # clear the user's session data
-        Session.objects.filter(session_key=request.session.session_key).delete()
-        return redirect('home')
 
-@login_required(login_url="/login/")
+from django.contrib.auth import logout
+
+def logout_view(request):
+    logout(request)
+    return JsonResponse({"message": "Déconnexion réussie"}, status=200)
+
 def generate_maze_view(request):
         seed = request.GET.get('seed')
         if not seed:
@@ -95,8 +97,6 @@ def generate_maze_view(request):
         result["scores"] = sorted_scores
         return JsonResponse(result)
 
-
-@login_required(login_url="/login/")
 def play_screen(request):
         return render(request,'views/index.html')
         # user is not authenticated, redirect to login
@@ -106,3 +106,12 @@ def register_page(request):
 
 def login_page(request):
      return render(request, "views/login.html")
+
+
+from django.http import JsonResponse
+
+def check_login_status(request):
+    if request.user.is_authenticated:
+        return JsonResponse({"status": "authenticated", "user": request.user.username})
+    else:
+        return JsonResponse({"status": "not authenticated"})

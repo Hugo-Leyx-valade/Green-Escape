@@ -42,8 +42,9 @@ INSTALLED_APPS = [
     'corsheaders',
 ]
 
-LOGIN_REDIRECT_URL = "/dashboard/"  # Change vers ta page principale
+LOGIN_REDIRECT_URL = "/"  # Change vers ta page principale
 LOGOUT_REDIRECT_URL = "/login/"
+LOGIN_URL = "/login-page/"
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -57,8 +58,6 @@ MIDDLEWARE = [
     'django.middleware.common.CommonMiddleware',
 ]
 
-SESSION_ENGINE = 'django.contrib.sessions.backends.db'
-
 ROOT_URLCONF = 'GreenEscape.urls'
 
 STATIC_URL = '/static/'
@@ -66,6 +65,12 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = [BASE_DIR / "static"]
 
 AUTH_USER_MODEL = "api.CustomUser"
+
+
+SESSION_ENGINE = "django.contrib.sessions.backends.db"  # Stocke les sessions en base de données
+SESSION_COOKIE_AGE = 1209600  # Durée de la session en secondes (14 jours)
+SESSION_SAVE_EVERY_REQUEST = True  # Rafraîchir la session à chaque requête
+SESSION_EXPIRE_AT_BROWSER_CLOSE = False  # Ne pas supprimer la session à la fermeture du navigateur
 
 
 TEMPLATES = [

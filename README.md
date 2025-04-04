@@ -16,7 +16,7 @@ S’il réussit à battre les différents algorithmes de recherche de chemins, l
 
 ## 🎯 Objectif
 
-Créer un jeu web où l’utilisateur affronte un algorithme de type **A\***, **Dijkstra** ou encore **MaxFlow** dans un labyrinthe généré par seed.
+Créer un jeu web où l’utilisateur affronte un algorithme de type **A\***, **Dijkstra** ou encore **BFS** dans un labyrinthe généré par seed.
 
 ## 🧑‍💻 Stack technique
 

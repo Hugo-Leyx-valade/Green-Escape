@@ -11,6 +11,7 @@
   <script src="{% static 'scripts/scripts.js' %}" defer></script>
 </head>
 
+
 <body>
   {% if user.is_authenticated %}
   <header>
@@ -44,5 +45,14 @@
   </div>
   <footer>Green Escape, All Rights Reserved® - 2025</footer>
   {% endif %}
+  <button id="logoutButton">Se déconnecter</button>
+
+  <script>
+    document.getElementById("logoutButton").addEventListener("click", async () => {
+        await fetch("http://127.0.0.1:8000/api/logout/", { credentials: "include" });
+        window.location.href = "/api/login-page/";  // Assure la redirection correcte
+    });
+</script>
+
 </body>
 </html>

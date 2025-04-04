@@ -11,6 +11,21 @@
     {% block content %}
     {% endblock %}
   </main>
+
+  <script>
+    async function checkAuth() {
+        const response = await fetch("http://localhost:8000/api/check-login/", { credentials: "include" });
+        const data = await response.json();
+  
+        if (data.status !== "authenticated") {
+            window.location.href = "api/login-page/";
+        }
+    }
+  
+    checkAuth();
+  </script>
+
 </body>
+
 
 </html>

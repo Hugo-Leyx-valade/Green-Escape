@@ -43,8 +43,8 @@ INSTALLED_APPS = [
 ]
 
 LOGIN_REDIRECT_URL = "/"  # Change vers ta page principale
-LOGOUT_REDIRECT_URL = "/login/"
-LOGIN_URL = "/login-page/"
+LOGOUT_REDIRECT_URL = "/auth-page/"
+LOGIN_URL = "/auth-page/"
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -70,7 +70,7 @@ AUTH_USER_MODEL = "api.CustomUser"
 SESSION_ENGINE = "django.contrib.sessions.backends.db"  # Stocke les sessions en base de données
 SESSION_COOKIE_AGE = 1209600  # Durée de la session en secondes (14 jours)
 SESSION_SAVE_EVERY_REQUEST = True  # Rafraîchir la session à chaque requête
-SESSION_EXPIRE_AT_BROWSER_CLOSE = False  # Ne pas supprimer la session à la fermeture du navigateur
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True  # Ne pas supprimer la session à la fermeture du navigateur
 
 
 TEMPLATES = [

@@ -16,5 +16,7 @@ urlpatterns = [
     path("login/", views.login_view, name="login"),
     path("check-login/", views.check_session, name="check_login"),
     path("logout/", views.logout_view, name="logout"),
-    path("auth-page/", views.auth_page)
+    path("auth-page/", views.auth_page),
+    path("profile/", views.profile),
+    path("data-profile/", views.retieveUserData)
 ]

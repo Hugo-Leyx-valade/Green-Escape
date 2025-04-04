@@ -4,9 +4,9 @@
 <head>
     <meta charset="UTF-8">
     <title>Green Escape - Profil</title>
-    <link rel="stylesheet" href="../styles/styles.css">
-    <link rel="stylesheet" href="../styles/profile.css">
-    <script src="../scripts/scripts.js" defer></script>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <link rel="stylesheet" href="{% static 'css/profile.css' %}">
+    <script src="{% static 'scripts/scripts.js' %}" defer></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Jersey+15&display=swap" rel="stylesheet">
@@ -33,7 +33,7 @@
 
     <div class="profileContainer">
         <div class="profileHeader">
-            <h1>My Profile</h1>
+            <h1 id="username"></h1>
         </div>
 
         <div class="profileAvatar">
@@ -42,8 +42,8 @@
 
         <div class="profileStats">
             <div class="statCard">
-                <h3>Ranking</h3>
-                <p>5</p>
+                <h3>Win</h3>
+                <p id="win"></p>
             </div>
             <div class="statCard">
                 <h3>Best Time</h3>
@@ -61,5 +61,21 @@
     </div>
 
     <footer>Green Escape, All Rights Reserved® - 2025</footer>
+
+
+<script>
+    document.addEventListener("DOMContentLoaded", async () => {
+        try {
+            const response = await fetch("/api/data-profile/");
+            const user = await response.json();
+            console.log("Utilisateur connecté :", user);
+            // Afficher l'utilisateur sur la page
+            document.getElementById("username").textContent = user.username;
+            document.getElementById("win").textContent = user.win;
+        } catch (error) {
+            console.error("Erreur :", error);
+        }
+    });
+</script>
 </body>
 </html>

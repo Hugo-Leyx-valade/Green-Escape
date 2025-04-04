@@ -133,9 +133,18 @@ def check_session(request):
     return JsonResponse({
         "session_key": request.session.session_key,
         "is_authenticated": request.user.is_authenticated,
-        "user": str(request.user)
+        "user": str(request.user.id),
+        "win": request.user.email,
     })
 
 
 def auth_page(request):
     return render(request, 'views/authpage.html')
+
+def profile(request):
+    return render(request, "views/profile.html")
+
+def retieveUserData(request):
+    users = User.objects.all().values()  # Filtre les champs
+    print("username : " , users[request.user.id-1])
+    return JsonResponse(users[request.user.id-1])  # Retourne la liste au format JSON

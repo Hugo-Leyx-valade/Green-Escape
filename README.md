@@ -28,3 +28,5 @@ Créer un jeu web où l’utilisateur affronte un algorithme de type **A\***, **
 - MongoDB (NoSQL)
 
 ---
+
+pip install -r requirements.txt

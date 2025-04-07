@@ -148,3 +148,6 @@ def retieveUserData(request):
     users = User.objects.all().values()  # Filtre les champs
     print("username : " , users[request.user.id-1])
     return JsonResponse(users[request.user.id-1])  # Retourne la liste au format JSON
+
+def showScoreboard(request):
+    return render(request, "views/scoreboard.html")

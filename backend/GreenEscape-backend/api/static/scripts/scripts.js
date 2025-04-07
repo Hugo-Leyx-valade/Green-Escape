@@ -1,3 +1,8 @@
+// scripts.js complet avec reset du labyrinthe + affichage du scoreboard + réduction taille labyrinthe
+
+let playerCol = 0;
+let playerRow = 0;
+let playerMoving = false;
 
 document.addEventListener("DOMContentLoaded", () => {
   const replayButton = document.querySelector(".button");
@@ -6,38 +11,33 @@ document.addEventListener("DOMContentLoaded", () => {
   const scoresDiv = document.querySelector(".scoresDiv");
 
   replayButton.addEventListener("click", async () => {
-    // 1. Récupérer ou générer une seed
     let seed = seedInput.value;
     if (!seed) {
       seed = Math.floor(Math.random() * 10000000);
-      console.log("Seed générée :", seed);
-    } else {
-      console.log("Seed utilisée :", seed);
     }
 
     try {
-      // 2. Appel au backend Django
       const response = await fetch(`http://localhost:8000/api/generate_maze?seed=${seed}`);
       const data = await response.json();
 
       const maze = data.maze;
-      console.log("Maze reçu !! :", maze);
-      console.log("scores : ", data.scores) 
-      console.log('je suis ici');
-      // 3. Réinitialiser l'affichage du labyrinthe
-      gameDiv.innerHTML = "";
+      window.maze = maze;
+      window.exit = data.exit;
+      const [startX, startY] = data.entrance;
 
-      // 4. Créer une grille dynamique pour le labyrinthe
+      gameDiv.innerHTML = ""; // Reset complet
+      scoresDiv.style.display = "none";
+
       const container = document.createElement("div");
       container.style.display = "grid";
-      container.style.gridTemplateColumns = `repeat(${maze[0].length}, 16px)`;
-      container.style.gridAutoRows = "16px";
-      container.style.gap = "0";
+      container.style.gridTemplateColumns = `repeat(${maze[0].length}, 20px)`;
+      container.style.gridAutoRows = "20px";
+      container.style.position = "relative";
       container.style.margin = "0 auto";
+      container.id = "maze-container";
 
-      // 5. Remplir la grille avec des images pixel art
-      maze.forEach(row => {
-        row.forEach(cell => {
+      maze.forEach((row) => {
+        row.forEach((cell) => {
           const cellDiv = document.createElement("div");
           const img = document.createElement("img");
 
@@ -50,39 +50,181 @@ document.addEventListener("DOMContentLoaded", () => {
         });
       });
 
+      const playerImg = document.createElement("img");
+      playerImg.id = "player";
+      playerImg.src = "../static/images/BackGuy.png";
+      playerImg.style.width = "20px";
+      playerImg.style.height = "20px";
+      playerImg.style.position = "absolute";
+      playerImg.style.zIndex = "10";
+
+      const cellSize = 20;
+      playerImg.style.left = `${startX * cellSize}px`;
+      playerImg.style.top = `${startY * cellSize}px`;
+
+      playerCol = startX;
+      playerRow = startY;
+
+      container.appendChild(playerImg);
+
       gameDiv.appendChild(container);
 
-      // 6. Affichage des scores dans la div scoresDiv
-      scoresDiv.innerHTML = "<h1>Scores</h1>";
-      if (data.scores && data.scores.length > 0) {
-        data.scores.forEach(([algo, time], index) => {
-          const entry = document.createElement("div");
-          entry.classList.add("scoreEntry");
-        
-          const rank = document.createElement("span");
-          rank.classList.add("rank");
-          rank.textContent = `#${index + 1}`;
-        
-          const name = document.createElement("span");
-          name.classList.add("algo");
-          name.textContent = algo;
-        
-          const timing = document.createElement("span");
-          timing.classList.add("time");
-          timing.textContent = `${time.toFixed(7)*50000} s`;
-        
-          entry.appendChild(rank);
-          entry.appendChild(name);
-          entry.appendChild(timing);
-          scoresDiv.appendChild(entry);
-        });
-        
-      } else {
-        scoresDiv.innerHTML += "<p>Aucun score reçu.</p>";
-      }
-
+      window.algoScores = data.scores;
+      window.playerStarted = false;
+      window.startTime = null;
     } catch (error) {
       console.error("Erreur lors du fetch du labyrinthe :", error);
     }
   });
+});
+
+document.addEventListener("keydown", (e) => {
+  e.preventDefault();
+  if (playerMoving) return;
+
+  const directionKeys = {
+    ArrowUp: [0, -1, "BackGuy.png"],
+    ArrowDown: [0, 1, "FrontGuy.png"],
+    ArrowLeft: [-1, 0, "LeftGuy.png"],
+    ArrowRight: [1, 0, "RightGuy.png"],
+  };
+
+  if (!(e.key in directionKeys)) return;
+  const [dx, dy, sprite] = directionKeys[e.key];
+  const player = document.getElementById("player");
+
+  if (!player || !window.maze) return;
+
+  const cellSize = 20;
+  player.src = `../static/images/${sprite}`;
+
+  if (!window.playerStarted) {
+    window.startTime = Date.now();
+    window.playerStarted = true;
+  }
+
+  playerMoving = true;
+
+  function isIntersection(x, y) {
+    const directions = [[0,1],[1,0],[0,-1],[-1,0]];
+    let count = 0;
+    for (const [dx, dy] of directions) {
+      const nx = x + dx;
+      const ny = y + dy;
+      if (window.maze[ny]?.[nx] === 0) count++;
+    }
+    return count >= 3;
+  }
+
+  function afficherScoreboard(elapsed) {
+    console.log(">>> afficherScoreboard appelé ! Temps :", elapsed);
+    const scoresDiv = document.querySelector(".scoresDiv");
+    const container = document.getElementById("maze-container");
+    if (container) {
+      container.style.margin = "0"; // haut gauche
+      container.style.display = "grid";
+      container.style.transform = "scale(0.6) translate(-20%, -20%)";
+      container.style.transition = "transform 0.5s ease-in-out, margin 0.5s ease-in-out";
+    }
+
+    scoresDiv.innerHTML = "<h1>Scores</h1>";
+    scoresDiv.style.display = "block";
+    scoresDiv.style.visibility = "visible";
+    scoresDiv.style.opacity = "1";
+    scoresDiv.style.position = "relative";
+    scoresDiv.style.zIndex = "5";
+
+    if (window.algoScores) {
+      window.algoScores.forEach(([algo, time], index) => {
+        const entry = document.createElement("div");
+        entry.classList.add("scoreEntry");
+
+        const rank = document.createElement("span");
+        rank.classList.add("rank");
+        rank.textContent = `#${index + 1}`;
+
+        const name = document.createElement("span");
+        name.classList.add("algo");
+        name.textContent = algo;
+
+        const timing = document.createElement("span");
+        timing.classList.add("time");
+        timing.textContent = `${(time * 25000).toFixed(2)} s`;
+
+        entry.appendChild(rank);
+        entry.appendChild(name);
+        entry.appendChild(timing);
+        scoresDiv.appendChild(entry);
+      });
+    }
+
+    const playerEntry = document.createElement("div");
+    playerEntry.classList.add("scoreEntry");
+
+    const playerRank = document.createElement("span");
+    playerRank.classList.add("rank");
+    playerRank.textContent = "★";
+
+    const playerName = document.createElement("span");
+    playerName.classList.add("algo");
+    playerName.textContent = "Player";
+
+    const playerTime = document.createElement("span");
+    playerTime.classList.add("time");
+    playerTime.textContent = `${elapsed} s`;
+
+    playerEntry.appendChild(playerRank);
+    playerEntry.appendChild(playerName);
+    playerEntry.appendChild(playerTime);
+    scoresDiv.appendChild(playerEntry);
+  }
+
+  function moveUntilIntersection() {
+    let interval = setInterval(() => {
+      const nx = playerCol + dx;
+      const ny = playerRow + dy;
+
+      if (
+        ny < 0 || ny >= window.maze.length ||
+        nx < 0 || nx >= window.maze[0].length ||
+        window.maze[ny][nx] === 1
+      ) {
+        clearInterval(interval);
+        playerMoving = false;
+        return;
+      }
+
+      playerCol = nx;
+      playerRow = ny;
+
+      player.style.left = `${playerCol * 20}px`;
+      player.style.top = `${playerRow * 20}px`;
+
+      const trail = document.createElement("div");
+      trail.style.width = "20px";
+      trail.style.height = "20px";
+      trail.style.backgroundColor = "rgba(0, 255, 0, 0.3)";
+      trail.style.position = "absolute";
+      trail.style.left = `${playerCol * 20}px`;
+      trail.style.top = `${playerRow * 20}px`;
+      trail.style.zIndex = "5";
+      document.getElementById("maze-container").appendChild(trail);
+
+      if (playerCol === window.exit[0] && playerRow === window.exit[1]) {
+        clearInterval(interval);
+        playerMoving = false;
+
+        const elapsed = ((Date.now() - window.startTime) / 1000).toFixed(2);
+        afficherScoreboard(elapsed);
+        return;
+      }
+
+      if (isIntersection(playerCol, playerRow)) {
+        clearInterval(interval);
+        playerMoving = false;
+      }
+    }, 50);
+  }
+
+  moveUntilIntersection();
 });

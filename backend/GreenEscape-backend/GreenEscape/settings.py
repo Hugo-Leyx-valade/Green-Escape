@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
 from pathlib import Path
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -41,6 +42,10 @@ INSTALLED_APPS = [
     'corsheaders',
 ]
 
+LOGIN_REDIRECT_URL = "/"  # Change vers ta page principale
+LOGOUT_REDIRECT_URL = "/login/"
+LOGIN_URL = "/login/"
+
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -55,10 +60,23 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'GreenEscape.urls'
 
+STATIC_URL = '/static/'
+
+STATICFILES_DIRS = [BASE_DIR / "static"]
+
+AUTH_USER_MODEL = "api.CustomUser"
+
+
+SESSION_ENGINE = "django.contrib.sessions.backends.db"  # Stocke les sessions en base de données
+SESSION_COOKIE_AGE = 1209600  # Durée de la session en secondes (14 jours)
+SESSION_SAVE_EVERY_REQUEST = True  # Rafraîchir la session à chaque requête
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True  # Ne pas supprimer la session à la fermeture du navigateur
+
+
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, 'api', 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -71,7 +89,8 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'GreenEscape.wsgi.application'
+
+WSGI_APPLICATION = "GreenEscape.wsgi.application"
 
 
 # Database
@@ -79,14 +98,15 @@ WSGI_APPLICATION = 'GreenEscape.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': 'backend_db',  # Nom de ta base de données MongoDB
-        'ENFORCE_SCHEMA': True,
+        'ENGINE': 'djongo',
+        'NAME': 'GreenEscape_db',  # Remplacez par le nom de votre base de données
+        'ENFORCE_SCHEMA': False,
         'CLIENT': {
-            'host': 'mongodb+srv://green-escape:XzQT5qT9tmrJPCoW@cluster0.e8i7yml.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0',  # URL de connexion à MongoDB
-        },
+            'host': 'mongodb+srv://admin:admin@cluster0.e8i7yml.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0'
+        }
     }
 }
+
 
 
 # Password validation
@@ -108,6 +128,7 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 
+
 # Internationalization
 # https://docs.djangoproject.com/en/5.1/topics/i18n/
 
@@ -123,9 +144,9 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
-STATIC_URL = 'static/'
-
-# Default primary key field type
+STATIC_URL = '/static/'
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
+# Default primary key field type    
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'

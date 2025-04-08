@@ -177,6 +177,31 @@ document.addEventListener("keydown", (e) => {
     playerEntry.appendChild(playerName);
     playerEntry.appendChild(playerTime);
     scoresDiv.appendChild(playerEntry);
+    
+  }
+
+  async function saveTime(seed,elapsed) {
+    try {
+      console.log(seed.value, elapsed);
+      console.log(seed);
+      const response = await fetch("/api/saveTime/", {
+          method: "POST",
+          headers: { 
+            "Content-Type": "application/json" ,
+          },
+          body: JSON.stringify({ seed , elapsed })
+      });
+
+      const result = await response.json();
+
+      if (response.ok) {
+          window.location.href = "/";  // Redirige vers la page principale après connexion
+      } else {
+          document.getElementById("errorMessage").textContent = result.error;  // Affiche l'erreur si échec
+      }
+  } catch (error) {
+      console.error("Erreur lors de la connexion :", error);
+  }    
   }
 
   function moveUntilIntersection() {
@@ -216,6 +241,7 @@ document.addEventListener("keydown", (e) => {
 
         const elapsed = ((Date.now() - window.startTime) / 1000).toFixed(2);
         afficherScoreboard(elapsed);
+        saveTime(seed.value,elapsed)
         return;
       }
 

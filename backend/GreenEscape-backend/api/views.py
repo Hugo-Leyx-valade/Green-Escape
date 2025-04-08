@@ -71,9 +71,35 @@ def login_view(request):
         return JsonResponse({"error": "Méthode non autorisée"}, status=405)
     else:
             return redirect('/')
+    
+@csrf_exempt
+def saveBestTime(request):
+    if not request.user.is_authenticated:
+        return redirect('login-page/')
 
+    if request.method == "POST":
+        try:
+            data = json.loads(request.body)
+            seed = data.get("seed")
+            playerTime = data.get("elapsed")
+            playerId = request.user.id  # Utilisez request.user pour obtenir l'utilisateur actuel
 
+            if seed is None or playerTime is None:
+                return HttpResponseBadRequest("Données manquantes")
 
+            # Enregistrez ou mettez à jour le meilleur temps pour le joueur et la graine
+            player_time, created = PlayerTimePerSeed.objects.update_or_create(
+                player_id=playerId,
+                seed=seed,
+                defaults={'time_played': playerTime}
+            )
+
+            return JsonResponse({"status": "succès", "created": created})
+
+        except json.JSONDecodeError:
+            return JsonResponse({"error": "Requête invalide"}, status=400)
+
+    return HttpResponseBadRequest("Méthode non autorisée")
 
 
 from django.contrib.auth import logout

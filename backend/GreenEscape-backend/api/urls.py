@@ -19,5 +19,6 @@ urlpatterns = [
     path("auth-page/", views.auth_page),
     path("profile/", views.profile),
     path("data-profile/", views.retieveUserData),
-    path("scoreboard/", views.showScoreboard)
+    path("scoreboard/", views.showScoreboard),
+    path("saveTime/", views.saveBestTime)
 ]

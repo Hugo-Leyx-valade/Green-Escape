@@ -189,8 +189,8 @@ def saveMedals(request):
                 medals = data.get('medals')
                 playerId = request.user.id
                 if playerId and medals:
-                    return JsonResponse({"error": "Missing fields"}, status=400)
-                    user, created = User.objects.update_or_create(
+                    print("medals : ", medals)
+                    user = User.objects.update_or_create(
                     id=playerId,
                     defaults={'medails': medals}  # 🟡 Assure-toi que ce champ existe bien dans ton modèle
                 )

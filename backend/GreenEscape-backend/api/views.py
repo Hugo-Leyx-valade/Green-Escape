@@ -182,23 +182,18 @@ def showScoreboard(request):
 
 @csrf_exempt
 def saveMedals(request):
-    if request.method == "POST":
-        try:
-            data = json.loads(request.body)
-            medals = data.get('medals')
-            playerId = request.user.id
-
-            if medals is None:
-                return HttpResponseBadRequest("Données manquantes")
-    
-            user, created = User.objects.update_or_create(
-                id=playerId,
-                defaults={'medails': medals}  # 🟡 Assure-toi que ce champ existe bien dans ton modèle
-            )
-
-            return JsonResponse({"status": "succès", "created": created})
-
-        except json.JSONDecodeError:
-            return JsonResponse({"error": "Requête invalide"}, status=400)
-
-    return HttpResponseBadRequest("Méthode non autorisée")
+    if not request.user.is_authenticated:
+        if request.method == "POST":
+            try:
+                data = json.loads(request.body)
+                medals = data.get('medals')
+                playerId = request.user.id
+                if not username or not password:
+                    return JsonResponse({"error": "Missing fields"}, status=400)
+                    user, created = User.objects.update_or_create(
+                    id=playerId,
+                    defaults={'medails': medals}  # 🟡 Assure-toi que ce champ existe bien dans ton modèle
+                )
+                return JsonResponse({"message": "medals added"}, status=201)
+            except json.JSONDecodeError:
+                return JsonResponse({"error": "Invalid JSON format"}, status=400)    

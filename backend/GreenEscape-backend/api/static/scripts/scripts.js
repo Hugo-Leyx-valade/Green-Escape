@@ -3,6 +3,7 @@
 let playerCol = 0;
 let playerRow = 0;
 let playerMoving = false;
+const csrftoken = document.querySelector('[name=csrf-token]')?.content;
 
 document.addEventListener("DOMContentLoaded", () => {
   const replayButton = document.querySelector(".button");
@@ -163,11 +164,10 @@ document.addEventListener("keydown", (e) => {
       }
       console.log("medails",medails);
     });
-    fetch("https://green-escape.onrender.com/api/saveMedals", {
+    fetch("api/saveMedals", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "X-CSRFToken": csrftoken,
       },
       credentials: "include", // ← super important pour que Django voie l'utilisateur connecté
       body: JSON.stringify({ medals: medails }),

@@ -182,7 +182,7 @@ document.addEventListener("keydown", (e) => {
 
   async function saveTime(seed,elapsed) {
     try {
-      console.log(seed.value, elapsed);
+      console.log(seed, elapsed);
       console.log(seed);
       const response = await fetch("/api/saveTime/", {
           method: "POST",

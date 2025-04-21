@@ -74,6 +74,7 @@ def login_view(request):
     
 @csrf_exempt
 def saveBestTime(request):
+    PlayerTimePerSeed = None
     if not request.user.is_authenticated:
         return redirect('login-page/')
 

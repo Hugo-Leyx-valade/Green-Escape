@@ -188,7 +188,7 @@ def saveMedals(request):
                 data = json.loads(request.body)
                 medals = data.get('medals')
                 playerId = request.user.id
-                if not username or not password:
+                if playerId and medals:
                     return JsonResponse({"error": "Missing fields"}, status=400)
                     user, created = User.objects.update_or_create(
                     id=playerId,

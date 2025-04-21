@@ -198,7 +198,7 @@ document.addEventListener("keydown", (e) => {
     try {
       console.log(seed, elapsed);
       console.log(seed);
-      const response = await fetch("/api/saveTime/", {
+      const response = await fetch("/saveTime/", {
           method: "POST",
           headers: { 
             "Content-Type": "application/json" ,

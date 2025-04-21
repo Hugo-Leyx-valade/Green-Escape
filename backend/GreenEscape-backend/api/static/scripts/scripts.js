@@ -17,7 +17,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     try {
-      const response = await fetch(`http://localhost:8000/api/generate_maze?seed=${seed}`);
+      const response = await fetch(`https://green-escape-backend.onrender.com/api/generate_maze?seed=${seed}`);
       const data = await response.json();
 
       const maze = data.maze;

@@ -42,7 +42,7 @@ INSTALLED_APPS = [
 ]
 
 LOGIN_REDIRECT_URL = "/"  # Change vers ta page principale
-LOGOUT_REDIRECT_URL = "/login/"
+LOGOUT_REDIRECT_URL = "login-page/"
 LOGIN_URL = "/login/"
 
 MIDDLEWARE = [

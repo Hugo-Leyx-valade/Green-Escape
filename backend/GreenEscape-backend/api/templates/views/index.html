@@ -49,7 +49,7 @@
 
   <script>
     document.getElementById("logoutButton").addEventListener("click", async () => {
-        await fetch("https://green-escape-backend.onrender.com/api/logout/", { credentials: "include" });
+        await fetch("https://green-escape.onrender.com/api/logout/", { credentials: "include" });
         window.location.href = "/api/login-page/";  // Assure la redirection correcte
     });
 </script>

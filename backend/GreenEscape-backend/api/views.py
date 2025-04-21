@@ -180,20 +180,33 @@ def retieveUserData(request):
 def showScoreboard(request):
     return render(request, "views/scoreboard.html")
 
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+import json
+from django.contrib.auth.models import User  # ou ton modèle personnalisé
+
 @csrf_exempt
 def saveMedals(request):
     if not request.user.is_authenticated:
-        if request.method == "POST":
-            try:
-                data = json.loads(request.body)
-                medals = data.get('medals')
-                playerId = request.user.id
-                if playerId and medals:
-                    print("medals : ", medals)
-                    user = User.objects.update_or_create(
+        return JsonResponse({"error": "Utilisateur non authentifié"}, status=401)
+
+    if request.method == "POST":
+        try:
+            data = json.loads(request.body)
+            medals = data.get('medals')
+            print("medals:", medals)
+            playerId = request.user.id
+
+            if playerId and medals is not None:
+                User.objects.update_or_create(
                     id=playerId,
-                    defaults={'medails': medals}  # 🟡 Assure-toi que ce champ existe bien dans ton modèle
+                    defaults={'medails': medals}  # ⚠️ assure-toi que "medails" est le bon champ
                 )
-                return JsonResponse({"message": "medals added"}, status=201)
-            except json.JSONDecodeError:
-                return JsonResponse({"error": "Invalid JSON format"}, status=400)    
+                return JsonResponse({"message": "Médailles sauvegardées avec succès"}, status=201)
+            else:
+                return JsonResponse({"error": "ID utilisateur ou médailles manquantes"}, status=400)
+
+        except json.JSONDecodeError:
+            return JsonResponse({"error": "Format JSON invalide"}, status=400)
+
+    return JsonResponse({"error": "Méthode non autorisée"}, status=405)

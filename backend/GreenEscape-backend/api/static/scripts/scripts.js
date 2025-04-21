@@ -164,6 +164,7 @@ document.addEventListener("keydown", (e) => {
       }
       console.log("medails",medails);
     });
+    console.log("triks");
     fetch("/api/saveMedals", {
       method: "POST",
       headers: {

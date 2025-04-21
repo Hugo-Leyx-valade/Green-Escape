@@ -167,6 +167,7 @@ document.addEventListener("keydown", (e) => {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        "X-CSRFToken": csrftoken,
       },
       credentials: "include", // ← super important pour que Django voie l'utilisateur connecté
       body: JSON.stringify({ medals: medails }),

@@ -180,6 +180,7 @@ def retieveUserData(request):
 def showScoreboard(request):
     return render(request, "views/scoreboard.html")
 
+@csrf_exempt
 def saveMedals(request):
     if request.method == "POST":
         try:

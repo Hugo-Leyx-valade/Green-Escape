@@ -14,7 +14,7 @@
 
   <script>
     async function checkAuth() {
-        const response = await fetch("http://localhost:8000/api/check-login/", { credentials: "include" });
+        const response = await fetch("https://green-escape-backend.onrender.com/api/check-login/", { credentials: "include" });
         const data = await response.json();
   
         if (data.status !== "authenticated") {

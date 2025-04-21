@@ -164,7 +164,7 @@ document.addEventListener("keydown", (e) => {
       }
       console.log("medails",medails);
     });
-    fetch("api/saveMedals", {
+    fetch("/saveMedals", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

@@ -183,7 +183,6 @@ def showScoreboard(request):
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 import json
-from django.contrib.auth.models import User  # ou ton modèle personnalisé
 
 @csrf_exempt
 def saveMedals(request):

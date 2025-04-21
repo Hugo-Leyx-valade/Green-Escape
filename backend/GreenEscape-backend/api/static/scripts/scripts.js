@@ -164,7 +164,7 @@ document.addEventListener("keydown", (e) => {
       }
       console.log("medails",medails);
     });
-    fetch("api/saveMedals", {
+    fetch("/saveMedals", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -198,7 +198,7 @@ document.addEventListener("keydown", (e) => {
     try {
       console.log(seed, elapsed);
       console.log(seed);
-      const response = await fetch("/saveTime/", {
+      const response = await fetch("/api/saveTime/", {
           method: "POST",
           headers: { 
             "Content-Type": "application/json" ,

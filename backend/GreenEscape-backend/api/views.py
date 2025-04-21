@@ -107,7 +107,7 @@ from django.contrib.auth import logout
 
 def logout_view(request):
     logout(request)
-    return redirect('login-page/')
+    return redirect('./login-page/')
 
 
 def generate_maze_view(request):

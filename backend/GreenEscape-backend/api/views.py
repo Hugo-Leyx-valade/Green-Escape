@@ -4,6 +4,7 @@ from django.http import JsonResponse
 from django.shortcuts import render, redirect
 from django.contrib.auth.hashers import make_password
 from .models import CustomUser
+from .models import PlayerTimePerSeed
 from api.algorithms import algo
 from api.algorithms import solvers
 from django.contrib.auth.forms import AuthenticationForm
@@ -20,6 +21,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login
 from django.http import JsonResponse
 import json
+from django.http import JsonResponse, HttpResponseBadRequest
 
 sys.path.append(os.path.join(os.path.dirname(__file__), '../../../algorithms'))
 
@@ -74,7 +76,6 @@ def login_view(request):
     
 @csrf_exempt
 def saveBestTime(request):
-    PlayerTimePerSeed = None
     if not request.user.is_authenticated:
         return redirect('login-page/')
 
@@ -178,3 +179,25 @@ def retieveUserData(request):
 
 def showScoreboard(request):
     return render(request, "views/scoreboard.html")
+
+def saveMedals(request):
+    if request.method == "POST":
+        try:
+            data = json.loads(request.body)
+            medals = data.get('medals')
+            playerId = request.user.id
+
+            if medals is None:
+                return HttpResponseBadRequest("Données manquantes")
+    
+            user, created = User.objects.update_or_create(
+                id=playerId,
+                defaults={'medails': medals}  # 🟡 Assure-toi que ce champ existe bien dans ton modèle
+            )
+
+            return JsonResponse({"status": "succès", "created": created})
+
+        except json.JSONDecodeError:
+            return JsonResponse({"error": "Requête invalide"}, status=400)
+
+    return HttpResponseBadRequest("Méthode non autorisée")

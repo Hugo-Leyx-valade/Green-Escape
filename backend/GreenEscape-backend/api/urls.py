@@ -20,5 +20,6 @@ urlpatterns = [
     path("profile/", views.profile),
     path("data-profile/", views.retieveUserData),
     path("scoreboard/", views.showScoreboard),
-    path("saveTime/", views.saveBestTime)
+    path("saveTime/", views.saveBestTime),
+    path("saveMedals", views.saveMedals)
 ]

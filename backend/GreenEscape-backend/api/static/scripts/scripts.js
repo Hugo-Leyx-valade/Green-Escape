@@ -149,15 +149,28 @@ document.addEventListener("keydown", (e) => {
 
         const timing = document.createElement("span");
         timing.classList.add("time");
-        timing.textContent = `${(time * 25000).toFixed(2)} s`;
-
+        timing.textContent = `${(time * 30000).toFixed(2)} s`;
         entry.appendChild(rank);
         entry.appendChild(name);
         entry.appendChild(timing);
         scoresDiv.appendChild(entry);
       });
     }
-
+    let medails = 0;
+    window.algoScores.forEach(([algo, time], index) => {
+      if(elapsed < (time * 30000).toFixed(2)) {
+        medails = medails + 1;
+      }
+      console.log("medails",medails);
+    });
+    fetch("https://green-escape.onrender.com/api/saveMedals", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      credentials: "include", // ← super important pour que Django voie l'utilisateur connecté
+      body: JSON.stringify({ medals: medails }),
+    });
     const playerEntry = document.createElement("div");
     playerEntry.classList.add("scoreEntry");
 
@@ -195,7 +208,7 @@ document.addEventListener("keydown", (e) => {
       const result = await response.json();
 
       if (response.ok) {
-          window.location.href = "/";  // Redirige vers la page principale après connexion
+          alert("bien ouej !")  // Redirige vers la page principale après connexion
       } else {
           document.getElementById("errorMessage").textContent = result.error;  // Affiche l'erreur si échec
       }

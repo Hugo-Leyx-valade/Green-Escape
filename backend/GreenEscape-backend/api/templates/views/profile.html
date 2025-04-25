@@ -3,20 +3,125 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Green Escape - Profil</title>
     <link rel="stylesheet" href="{% static 'css/styles.css' %}">
     <link rel="stylesheet" href="{% static 'css/profile.css' %}">
-    <script src="{% static 'scripts/scripts.js' %}" defer></script>
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Jersey+15&display=swap" rel="stylesheet">
 </head>
+<style>
+    .profileStats {
+        display: flex;
+        justify-content: center; 
+        align-items: center; 
+        gap: 10px; 
+        width: 100%;
+        height: auto; 
+        margin-top: 0; /* Supprimez tout espace au-dessus des stats */
+    }
 
+    .statCard {
+        display: flex; 
+        flex-direction: column;
+        justify-content: center; 
+        align-items: center; 
+        border: 2px solid rgb(89, 187, 97);
+        border-radius: 10px;
+        padding: 15px;
+        text-align: center;
+        background-color: rgba(89, 187, 97, 0.1);
+        min-width: 150px;
+        max-width: 200px;
+        height: 150px; 
+    }
+
+    /* Fenêtre modale */
+    .modal {
+        display: none; /* Cachée par défaut */
+        position: fixed;
+        z-index: 1000; /* Assurez-vous que la modale est au-dessus des autres éléments */
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background-color: rgba(0, 0, 0, 0.5); /* Fond semi-transparent */
+    }
+
+    .modal-content {
+        position: relative;
+        z-index: 1001; /* Assurez-vous que le contenu est au-dessus du fond semi-transparent */
+        background-color: #fff;
+        margin: 10% auto;
+        padding: 20px;
+        border: 1px solid #888;
+        width: 50%;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    .close-button {
+        color: #aaa;
+        float: right;
+        font-size: 28px;
+        font-weight: bold;
+        cursor: pointer;
+    }
+
+    .close-button:hover,
+    .close-button:focus {
+        color: black;
+        text-decoration: none;
+    }
+
+    .saveButton {
+        background-color: rgb(89, 187, 97);
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+        cursor: pointer;
+        font-family: "Jersey 15", sans-serif;
+        letter-spacing: 2px;
+    }
+
+    .saveButton:hover {
+        background-color: rgb(70, 150, 80);
+    }
+
+    .profileHeader {
+        text-align: center; /* Centrer le texte */
+        margin-bottom: 10px; /* Réduire l'espace en dessous du username */
+    }
+
+    #newPassword {
+        pointer-events: auto; /* Assurez-vous que les interactions sont activées */
+        background-color: #fff; /* Assurez-vous que le champ est visible */
+        border: 1px solid #ccc; /* Ajoutez une bordure pour le rendre visible */
+        padding: 10px;
+        width: 100%; /* Ajustez la largeur si nécessaire */
+        box-sizing: border-box;
+    }
+
+    #modalNewPassword {
+        pointer-events: auto; /* Assurez-vous que les interactions sont activées */
+        background-color: #fff; /* Assurez-vous que le champ est visible */
+        border: 1px solid #ccc; /* Ajoutez une bordure pour le rendre visible */
+        padding: 10px;
+        width: 100%; /* Ajustez la largeur si nécessaire */
+        box-sizing: border-box;
+        border-radius: 5px; /* Ajoutez un arrondi pour un style cohérent */
+        font-size: 1em; /* Taille de police lisible */
+    }
+</style>
 <body>
     <header>
         <div class="parentHeader">
             <div class="logoHeader">
-                <img class="logo" src="../images/logoGreenEscape.png">
+                <img class="logo" src="../../static/images/logoGreenEscape.png">
             </div>
 
             <div class="titleHeader">
@@ -32,26 +137,19 @@
     </header>
 
     <div class="profileContainer">
+
         <div class="profileHeader">
             <h1 id="username"></h1>
         </div>
 
-        <div class="profileAvatar">
-            <img src="../images/FrontGuy.png" alt="Profile Avatar">
-        </div>
-
         <div class="profileStats">
             <div class="statCard">
-                <h3>Win</h3>
-                <p id="win"></p>
-            </div>
-            <div class="statCard">
-                <h3>Best Time</h3>
-                <p>1 min 45 (sacré golem)</p>
+                <h3>Medals</h3>
+                <p id="medails"></p>
             </div>
             <div class="statCard">
                 <h3>Game Played</h3>
-                <p>42</p>
+                <p id="played_game"></p>
             </div>
         </div>
 
@@ -60,8 +158,25 @@
         </div>
     </div>
 
-    <footer>Green Escape, All Rights Reserved® - 2025</footer>
+    <!-- Fenêtre modale pour éditer le profil -->
+    <div id="editProfileModal" class="modal">
+        <div class="modal-content">
+            <span class="close-button">&times;</span>
+            <h2>Edit Profile</h2>
+            <form id="editProfileForm">
+                {% csrf_token %}
+                <label for="modalUsername">Username:</label>
+                <input type="text" id="modalUsername" name="username" placeholder="Enter new username">
+                <br>
+                <label for="modalNewPassword">New Password:</label>
+                <input type="password" id="modalNewPassword" name="newPassword" placeholder="Enter new password">
+                
+                <button type="submit" class="saveButton">Save Changes</button>
+            </form>
+        </div>
+    </div>
 
+    <footer>Green Escape, All Rights Reserved® - 2025</footer>
 
 <script>
     document.addEventListener("DOMContentLoaded", async () => {
@@ -71,10 +186,93 @@
             console.log("Utilisateur connecté :", user);
             // Afficher l'utilisateur sur la page
             document.getElementById("username").textContent = user.username;
-            document.getElementById("win").textContent = user.win;
+            document.getElementById("medails").textContent = user.medails;
+            document.getElementById("played_game").textContent = user.played_game;
         } catch (error) {
             console.error("Erreur :", error);
         }
+    });
+</script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const modal = document.getElementById("editProfileModal");
+        const editButton = document.querySelector(".editProfileButton");
+        const closeButton = document.querySelector(".close-button");
+        const form = document.getElementById("editProfileForm");
+
+        // Ouvrir la fenêtre modale
+        editButton.addEventListener("click", () => {
+            modal.style.display = "block";
+
+            // Pré-remplir le champ username avec la valeur actuelle
+            const currentUsername = document.getElementById("username").textContent;
+            document.getElementById("modalUsername").value = currentUsername;
+        });
+
+        // Fermer la fenêtre modale
+        closeButton.addEventListener("click", () => {
+            modal.style.display = "none";
+        });
+
+        // Fermer la fenêtre modale en cliquant à l'extérieur
+        window.addEventListener("click", (event) => {
+            if (event.target === modal) {
+                modal.style.display = "none";
+            }
+        });
+
+        // Gestion de la soumission du formulaire
+        form.addEventListener("submit", async (event) => {
+            event.preventDefault();
+
+            const formData = new FormData();
+            const newUsername = document.getElementById("modalUsername").value.trim();
+            const newPassword = document.getElementById("modalNewPassword").value.trim();
+
+            // Ajouter uniquement les champs non vides
+            if (newUsername) {
+                formData.append("username", newUsername);
+            }
+            if (newPassword) {
+                formData.append("newPassword", newPassword);
+            }
+
+            // Si aucun champ n'est rempli, ne pas envoyer la requête
+            if (!newUsername && !newPassword) {
+                alert("No changes were made.");
+                modal.style.display = "none";
+                return;
+            }
+
+            try {
+                const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value; // Récupérer le token CSRF
+                const response = await fetch("/api/edit-profile/", {
+                    method: "POST",
+                    body: formData,
+                    headers: {
+                        "X-CSRFToken": csrfToken, // Ajouter le token CSRF dans l'en-tête
+                    },
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    alert("Profile updated successfully!");
+                    modal.style.display = "none";
+
+                    // Mettre à jour le username affiché sur la page
+                    if (data.data.username) {
+                        document.getElementById("username").textContent = data.data.username;
+                    }
+                } else {
+                    const errorData = await response.json();
+                    alert(errorData.error || "Failed to update profile.");
+                }
+            } catch (error) {
+                console.error("Error:", error);
+                alert("An error occurred.");
+            }
+        });
     });
 </script>
 </body>

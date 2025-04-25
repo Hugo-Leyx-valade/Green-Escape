@@ -21,12 +21,14 @@ from django.contrib.auth import authenticate, login
 from django.http import JsonResponse
 import json
 
+
 sys.path.append(os.path.join(os.path.dirname(__file__), '../../../algorithms'))
 
 def home(request):
     return JsonResponse({"message": "Bienvenue sur l'API Green Escape"})
 
 User = get_user_model()
+CustomUser = get_user_model()
 
 
 @csrf_exempt
@@ -148,3 +150,42 @@ def retieveUserData(request):
     users = User.objects.all().values()  # Filtre les champs
     print("username : " , users[request.user.id-1])
     return JsonResponse(users[request.user.id-1])  # Retourne la liste au format JSON
+
+
+from django.views.decorators.csrf import csrf_exempt
+from django.http import JsonResponse
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth import get_user_model
+
+CustomUser = get_user_model()
+
+@csrf_exempt
+@login_required
+def edit_profile(request):
+    if request.method == "POST":
+        user = request.user
+        response_data = {}
+
+        # Vérifiez si un nouveau username est fourni
+        if "username" in request.POST:
+            new_username = request.POST["username"]
+            # Vérifiez si le username existe déjà
+            if CustomUser.objects.filter(username=new_username).exclude(id=user.id).exists():
+                return JsonResponse({"error": "Username already exists."}, status=400)
+            user.username = new_username
+            response_data["username"] = new_username
+
+        # Vérifiez si un nouveau mot de passe est fourni
+        if "newPassword" in request.POST:
+            new_password = request.POST["newPassword"]
+            user.set_password(new_password)
+            response_data["password"] = "Password updated."
+
+        # Sauvegardez les modifications uniquement si des changements ont été effectués
+        if response_data:
+            user.save()
+            return JsonResponse({"message": "Profile updated successfully!", "data": response_data})
+
+        return JsonResponse({"error": "No changes were made."}, status=400)
+
+    return JsonResponse({"error": "Invalid request"}, status=400)

@@ -111,8 +111,7 @@ def generate_maze_view(request):
 def play_screen(request):
     if request.user.is_authenticated:
         print('authentifié')
-        return render(request,'views/index.html')
-        # user is not authenticated, redirect to login
+        return redirect('/api/hub/')
     else:
         return redirect('/api/login-page/')
 
@@ -189,3 +188,14 @@ def edit_profile(request):
         return JsonResponse({"error": "No changes were made."}, status=400)
 
     return JsonResponse({"error": "Invalid request"}, status=400)
+
+def scoreboard(request):
+    # Récupérer les 10 joueurs avec le plus de médailles, triés par médailles (descendant) et username (ascendant)
+    top_players = CustomUser.objects.all().order_by('-medails', 'username')[:10]
+    return render(request, "views/scoreboard.html", {"top_players": top_players})
+
+def hub(request):
+    if request.user.is_authenticated:
+        return render(request, "views/index.html")
+    else:
+        return redirect('/api/login-page/')

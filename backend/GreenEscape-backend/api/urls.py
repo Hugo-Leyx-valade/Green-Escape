@@ -21,4 +21,6 @@ urlpatterns = [
     path("profile/", views.profile),
     path("data-profile/", views.retieveUserData),
     path("edit-profile/", edit_profile, name="edit-profile"),
+    path("scoreboard/", views.scoreboard, name="scoreboard"),
+    path("hub/", views.hub, name="hub"),
 ]

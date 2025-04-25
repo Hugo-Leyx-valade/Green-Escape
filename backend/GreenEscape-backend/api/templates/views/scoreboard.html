@@ -4,8 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <title>Green Escape - Scoreboard</title>
-    <link rel="stylesheet" href="{% static 'css/scoreboard1.css' %}">
-    <link rel="stylesheet" href="../styles/scoreboard.css">
+    <link rel="stylesheet" href="../../static/css/styles.css">
+    <link rel="stylesheet" href="../../static/css/scoreboard.css">
     <script src="{% static 'scripts/scripts.js' %}" defer></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -17,7 +17,7 @@
     <header>
         <div class="parentHeader">
             <div class="logoHeader">
-                <img class="logo" src="../images/logoGreenEscape.png">
+                <img class="logo" src="../../static/images/logoGreenEscape.png" alt="Green Escape Logo">
             </div>
 
             <div class="titleHeader">
@@ -25,92 +25,35 @@
             </div>
 
             <div class="navParameters">
-                <a href="index.html">Hub</a>
-                <a href="profile.html">Profile</a>
-                <a href="scoreboard.html">Scoreboard</a>
+                <a href="#" onclick="window.location.href='/api/hub/'">Hub</a>
+                <a href="#" onclick="window.location.href='/api/profile/'">Profil</a>
+                <a href="#" onclick="window.location.href='/api/scoreboard/'">Scoreboard</a>
             </div>
         </div>
     </header>
 
     <div class="scoreboardContainer">
-        <div class="scoreboardHeader">
-            <h1>Global Ranking</h1>
-        </div>
-
-        <div class="scoreboardTable">
-            <table class="scoreTable">
-                <thead>
-                    <tr>
-                        <th>Rank</th>
-                        <th>Name</th>
-                        <th>Best Time</th>
-                        <th>Party Played</th>
-                    </tr>
-                </thead>
-                    <tbody>
-                    <tr class="rank-1">
-                        <td>1</td>
-                        <td>GreenHero42</td>
-                        <td>1 min 30</td>
-                        <td>10</td>
-                    </tr>
-                    <tr class="rank-2">
-                        <td>2</td>
-                        <td>EcoWarrior</td>
-                        <td>1 min 45</td>
-                        <td>8</td>
-                    </tr>
-                    <tr class="rank-3">
-                        <td>3</td>
-                        <td>NatureSavior</td>
-                        <td>2 min 10</td>
-                        <td>12</td>
-                    </tr>
-                    <tr>
-                        <td>4</td>
-                        <td>ClimateChamp</td>
-                        <td>2 min 30</td>
-                        <td>15</td>
-                    </tr>
-                    <tr>
-                        <td>5</td>
-                        <td>BioDefender</td>
-                        <td>2 min 45</td>
-                        <td>20</td>
-                    </tr>
-                    <tr>
-                        <td>6</td>
-                        <td>EcoGuardian</td>
-                        <td>3 min 00</td>
-                        <td>25</td>
-                    </tr>
-                    <tr>
-                        <td>7</td>
-                        <td>GreenWarrior</td>
-                        <td>3 min 15</td>
-                        <td>30</td>
-                    </tr>
-                    <tr>
-                        <td>8</td>
-                        <td>EarthProtector</td>
-                        <td>3 min 30</td>
-                        <td>35</td>
-                    </tr>
-                    <tr>
-                        <td>9</td>
-                        <td>PlanetSavior</td>
-                        <td>3 min 45</td>
-                        <td>40</td>
-                    </tr>
-                    <tr>
-                        <td>10</td>
-                        <td>EcoChampion</td>
-                        <td>4 min 00</td>
-                        <td>45</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
+        <h1 class="scoreboardHeader">Top Players</h1>
+        <table class="scoreTable">
+            <thead>
+                <tr>
+                    <th>Rank</th>
+                    <th>Username</th>
+                    <th>Medals</th>
+                    <th>Games Played</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for player in top_players %}
+                <tr class="rank-{{ forloop.counter }}">
+                    <td>{{ forloop.counter }}</td>
+                    <td>{{ player.username }}</td>
+                    <td>{{ player.medails }}</td>
+                    <td>{{ player.played_game }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
     </div>
 
 <footer>Green Escape, All Rights Reserved® - 2025</footer>

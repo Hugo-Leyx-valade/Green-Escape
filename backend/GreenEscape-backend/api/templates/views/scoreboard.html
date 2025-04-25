@@ -4,8 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Green Escape - Scoreboard</title>
-    <link rel="stylesheet" href="{% static 'css/scoreboard1.css' %}">
-    <link rel="stylesheet" href="../styles/scoreboard.css">
+    <link rel="stylesheet" href="{% static 'css/scoreboard.css' %}">
     <script src="{% static 'scripts/scripts.js' %}" defer></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -17,7 +16,7 @@
     <header>
         <div class="parentHeader">
             <div class="logoHeader">
-                <img class="logo" src="../images/logoGreenEscape.png">
+                <img class="logo" src="{% static 'images/logoGreenEscape.png' %}">
             </div>
 
             <div class="titleHeader">
@@ -25,9 +24,9 @@
             </div>
 
             <div class="navParameters">
-                <a href="index.html">Hub</a>
-                <a href="profile.html">Profile</a>
-                <a href="scoreboard.html">Scoreboard</a>
+                <a href="#" onclick="window.location.href='/api/'">Game</a>
+                <a href="#" onclick="window.location.href='/api/profile/'">Profil</a>
+                <a href="#" onclick="window.location.href='/api/scoreboard/'">Scoreboard</a>
             </div>
         </div>
     </header>

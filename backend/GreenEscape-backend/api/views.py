@@ -4,6 +4,7 @@ from django.http import JsonResponse
 from django.shortcuts import render, redirect
 from django.contrib.auth.hashers import make_password
 from .models import CustomUser
+from .models import PlayerTimePerSeed
 from api.algorithms import algo
 from api.algorithms import solvers
 from django.contrib.auth.forms import AuthenticationForm
@@ -20,6 +21,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login
 from django.http import JsonResponse
 import json
+from django.http import JsonResponse, HttpResponseBadRequest
 
 
 sys.path.append(os.path.join(os.path.dirname(__file__), '../../../algorithms'))
@@ -73,16 +75,42 @@ def login_view(request):
         return JsonResponse({"error": "Méthode non autorisée"}, status=405)
     else:
             return redirect('/')
+    
+@csrf_exempt
+def saveBestTime(request):
+    if not request.user.is_authenticated:
+        return redirect('login-page/')
 
+    if request.method == "POST":
+        try:
+            data = json.loads(request.body)
+            seed = data.get("seed")
+            playerTime = data.get("elapsed")
+            playerId = request.user.id  # Utilisez request.user pour obtenir l'utilisateur actuel
 
+            if seed is None or playerTime is None:
+                return HttpResponseBadRequest("Données manquantes")
 
+            # Enregistrez ou mettez à jour le meilleur temps pour le joueur et la graine
+            player_time, created = PlayerTimePerSeed.objects.update_or_create(
+                player_id=playerId,
+                seed=seed,
+                defaults={'time_played': playerTime}
+            )
+
+            return JsonResponse({"status": "succès", "created": created})
+
+        except json.JSONDecodeError:
+            return JsonResponse({"error": "Requête invalide"}, status=400)
+
+    return HttpResponseBadRequest("Méthode non autorisée")
 
 
 from django.contrib.auth import logout
 
 def logout_view(request):
     logout(request)
-    return redirect('api/auth-page/')
+    return redirect('login-page/')
 
 
 def generate_maze_view(request):
@@ -151,7 +179,39 @@ def retieveUserData(request):
     print("username : " , users[request.user.id-1])
     return JsonResponse(users[request.user.id-1])  # Retourne la liste au format JSON
 
+def showScoreboard(request):
+    return render(request, "views/scoreboard.html")
 
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+import json
+
+@csrf_exempt
+def saveMedals(request):
+    if not request.user.is_authenticated:
+        return JsonResponse({"error": "Utilisateur non authentifié"}, status=401)
+
+    if request.method == "POST":
+        try:
+            data = json.loads(request.body)
+            medals = data.get('medals')
+            print("medals:", medals)
+            playerId = request.user.id
+
+            if playerId and medals is not None:
+                User.objects.update_or_create(
+                    id=playerId,
+                    defaults={'medails': medals}  # ⚠️ assure-toi que "medails" est le bon champ
+                )
+                return JsonResponse({"message": "Médailles sauvegardées avec succès"}, status=201)
+            else:
+                return JsonResponse({"error": "ID utilisateur ou médailles manquantes"}, status=400)
+
+        except json.JSONDecodeError:
+            return JsonResponse({"error": "Format JSON invalide"}, status=400)
+
+    return JsonResponse({"error": "Méthode non autorisée"}, status=405)
+  
 from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required

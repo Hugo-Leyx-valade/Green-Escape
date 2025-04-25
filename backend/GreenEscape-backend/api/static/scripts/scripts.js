@@ -3,6 +3,7 @@
 let playerCol = 0;
 let playerRow = 0;
 let playerMoving = false;
+const csrftoken = document.querySelector('[name=csrf-token]')?.content;
 
 document.addEventListener("DOMContentLoaded", () => {
   const replayButton = document.querySelector(".button");
@@ -17,7 +18,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     try {
-      const response = await fetch(`http://localhost:8000/api/generate_maze?seed=${seed}`);
+      const response = await fetch(`https://green-escape.onrender.com/api/generate_maze?seed=${seed}`);
       const data = await response.json();
 
       const maze = data.maze;
@@ -149,15 +150,29 @@ document.addEventListener("keydown", (e) => {
 
         const timing = document.createElement("span");
         timing.classList.add("time");
-        timing.textContent = `${(time * 25000).toFixed(2)} s`;
-
+        timing.textContent = `${(time * 30000).toFixed(2)} s`;
         entry.appendChild(rank);
         entry.appendChild(name);
         entry.appendChild(timing);
         scoresDiv.appendChild(entry);
       });
     }
-
+    let medails = 0;
+    window.algoScores.forEach(([algo, time], index) => {
+      if(elapsed < (time * 30000).toFixed(2)) {
+        medails = medails + 1;
+      }
+      console.log("medails",medails);
+    });
+    console.log("triks");
+    fetch("/api/saveMedals", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      credentials: "include", // ← super important pour que Django voie l'utilisateur connecté
+      body: JSON.stringify({ medals: medails }),
+    });
     const playerEntry = document.createElement("div");
     playerEntry.classList.add("scoreEntry");
 
@@ -177,6 +192,31 @@ document.addEventListener("keydown", (e) => {
     playerEntry.appendChild(playerName);
     playerEntry.appendChild(playerTime);
     scoresDiv.appendChild(playerEntry);
+    
+  }
+
+  async function saveTime(seed,elapsed) {
+    try {
+      console.log(seed, elapsed);
+      console.log(seed);
+      const response = await fetch("/api/saveTime/", {
+          method: "POST",
+          headers: { 
+            "Content-Type": "application/json" ,
+          },
+          body: JSON.stringify({ seed , elapsed })
+      });
+
+      const result = await response.json();
+
+      if (response.ok) {
+          alert("bien ouej !")  // Redirige vers la page principale après connexion
+      } else {
+          document.getElementById("errorMessage").textContent = result.error;  // Affiche l'erreur si échec
+      }
+  } catch (error) {
+      console.error("Erreur lors de la connexion :", error);
+  }    
   }
 
   function moveUntilIntersection() {
@@ -216,6 +256,7 @@ document.addEventListener("keydown", (e) => {
 
         const elapsed = ((Date.now() - window.startTime) / 1000).toFixed(2);
         afficherScoreboard(elapsed);
+        saveTime(seed.value,elapsed)
         return;
       }
 

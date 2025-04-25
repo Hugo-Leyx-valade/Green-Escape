@@ -9,6 +9,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Jersey+15&display=swap" rel="stylesheet">
   <script src="{% static 'scripts/scripts.js' %}" defer></script>
+  <meta name="csrf-token" content="{{ csrf_token }}">
 </head>
 
 
@@ -23,7 +24,11 @@
         <h1>Green Escape</h1>
       </div>
       <div class="navParameters">
+<<<<<<< HEAD
         <a href="#" onclick="window.location.href='/api/hub/'">Hub</a>
+=======
+        <a href="#" onclick="window.location.href='/api/'">Game</a>
+>>>>>>> 22d2d8dfdade5193ad1050d42620cb6e3260360c
         <a href="#" onclick="window.location.href='/api/profile/'">Profil</a>
         <a href="#" onclick="window.location.href='/api/scoreboard/'">Scoreboard</a>
       </div>
@@ -49,7 +54,7 @@
 
   <script>
     document.getElementById("logoutButton").addEventListener("click", async () => {
-        await fetch("http://127.0.0.1:8000/api/logout/", { credentials: "include" });
+        await fetch("https://green-escape.onrender.com/api/logout/", { credentials: "include" });
         window.location.href = "/api/login-page/";  // Assure la redirection correcte
     });
 </script>

@@ -2,6 +2,7 @@ from django.urls import path, include
 from . import views
 from django.contrib.auth import views as auth_views
 from django.contrib import admin
+from .views import edit_profile
 
 
 
@@ -19,7 +20,5 @@ urlpatterns = [
     path("auth-page/", views.auth_page),
     path("profile/", views.profile),
     path("data-profile/", views.retieveUserData),
-    path("scoreboard/", views.showScoreboard),
-    path("saveTime/", views.saveBestTime),
-    path("saveMedals", views.saveMedals)
+    path("edit-profile/", edit_profile, name="edit-profile"),
 ]

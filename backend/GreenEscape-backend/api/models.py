@@ -4,6 +4,7 @@ from django.db import models
 class CustomUser(AbstractUser):
     played_game = models.IntegerField(default=0)
     medails = models.IntegerField(default=0)
+
     groups = models.ManyToManyField(
         "auth.Group",
         related_name="customuser_set",  # Évite le conflit

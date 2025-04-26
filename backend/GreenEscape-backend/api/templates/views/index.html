@@ -10,6 +10,43 @@
   <link href="https://fonts.googleapis.com/css2?family=Jersey+15&display=swap" rel="stylesheet">
   <script src="{% static 'scripts/scripts.js' %}" defer></script>
   <meta name="csrf-token" content="{{ csrf_token }}">
+  <style>
+    /* Bouton de déconnexion */
+    .logoutButton {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px; /* Espacement entre l'icône et le texte */
+        background-color: rgb(89, 187, 97); /* Couleur principale */
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+        font-family: "Jersey 15", sans-serif;
+        font-size: 1em;
+        cursor: pointer;
+        transition: background-color 0.3s ease, transform 0.2s ease;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Icône dans le bouton */
+    .logoutIcon {
+        width: 20px;
+        height: 20px;
+    }
+
+    /* Effet au survol */
+    .logoutButton:hover {
+        background-color: rgb(70, 150, 80); /* Couleur légèrement plus foncée */
+        transform: scale(1.05); /* Légère mise en avant */
+    }
+
+    /* Effet au clic */
+    .logoutButton:active {
+        transform: scale(0.95); /* Légère réduction */
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    }
+  </style>
 </head>
 
 
@@ -47,7 +84,9 @@
   </div>
   <footer>Green Escape, All Rights Reserved® - 2025</footer>
   {% endif %}
-  <button id="logoutButton">Se déconnecter</button>
+  <button id="logoutButton" class="logoutButton">
+    Se déconnecter
+  </button>
 
   <script>
     document.getElementById("logoutButton").addEventListener("click", async () => {

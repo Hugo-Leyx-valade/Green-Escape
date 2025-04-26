@@ -1,23 +1,20 @@
+<!-- Nouveau index.html propre -->
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Mon Projet</title>
+  <title>Green Escape - Jeu</title>
   <link rel="stylesheet" href="{% static 'css/styles.css' %}">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Jersey+15&display=swap" rel="stylesheet">
-  <script src="{% static 'scripts/scripts.js' %}" defer></script>
 </head>
-
-
 <body>
-  {% if user.is_authenticated %}
+
+{% if user.is_authenticated %}
   <header>
     <div class="parentHeader">
       <div class="logoHeader">
-        <img class="logo" src="{% static 'images/logoGreenEscape.png' %}">
+        <img class="logo" src="{% static 'images/logoGreenEscape.png' %}" alt="Logo">
       </div>
       <div class="titleHeader">
         <h1>Green Escape</h1>
@@ -37,22 +34,20 @@
       <button class="button">Play</button>
     </div>
     <div class="seedButtonDiv">
-      <input type="number" id="seed" name="seed" min="0" max="99999999999" placeholder="Enter a seed">
+      <input type="number" id="seed" name="seed" placeholder="Enter a seed">
     </div>
     <div class="scoresDiv">
       <h1>Score</h1>
     </div>
   </div>
-  <footer>Green Escape, All Rights Reserved® - 2025</footer>
-  {% endif %}
-  <button id="logoutButton">Se déconnecter</button>
 
-  <script>
-    document.getElementById("logoutButton").addEventListener("click", async () => {
-        await fetch("http://127.0.0.1:8000/api/logout/", { credentials: "include" });
-        window.location.href = "/api/login-page/";  // Assure la redirection correcte
-    });
-</script>
+  <footer>Green Escape, All Rights Reserved® - 2025</footer>
+
+{% endif %}
+
+<button id="logoutButton">Se déconnecter</button>
+
+<script src="{% static 'scripts/scripts.js' %}"></script>
 
 </body>
 </html>

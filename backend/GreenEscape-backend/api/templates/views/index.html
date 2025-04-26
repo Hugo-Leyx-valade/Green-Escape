@@ -90,8 +90,25 @@
 
   <script>
     document.getElementById("logoutButton").addEventListener("click", async () => {
-        await fetch("https://green-escape.onrender.com/api/logout/", { credentials: "include" });
-        window.location.href = "/api/login-page/";  // Assure la redirection correcte
+        try {
+            const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute("content"); // Récupère le token CSRF
+            const response = await fetch("/api/logout/", {
+                method: "POST",
+                credentials: "include",
+                headers: {
+                    "X-CSRFToken": csrfToken, // Ajoute le token CSRF dans l'en-tête
+                },
+            });
+
+            if (response.ok) {
+                window.location.href = "/api/login-page/"; // Redirige vers la page de connexion
+            } else {
+                alert("Erreur lors de la déconnexion. Veuillez réessayer.");
+            }
+        } catch (error) {
+            console.error("Erreur :", error);
+            alert("Une erreur est survenue lors de la déconnexion.");
+        }
     });
 </script>
 

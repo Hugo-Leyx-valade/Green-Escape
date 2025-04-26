@@ -23,4 +23,5 @@ urlpatterns = [
     path("edit-profile/", edit_profile, name="edit-profile"),
     path("scoreboard/", views.scoreboard, name="scoreboard"),
     path("hub/", views.hub, name="hub"),
+    path("update-stats/", views.update_player_stats, name="update_player_stats"),
 ]

@@ -266,3 +266,19 @@ def logout_view(request):
         logout(request)
         return JsonResponse({"message": "Déconnexion réussie"}, status=200)
     return JsonResponse({"error": "Méthode non autorisée"}, status=405)
+
+@csrf_exempt
+@login_required
+def update_player_stats(request):
+    if request.method == "POST":
+        try:
+            user = request.user
+            data = json.loads(request.body)
+            medails_to_add = data.get("medails", 0)
+            user.medails += medails_to_add
+            user.played_game += 1
+            user.save()
+            return JsonResponse({"message": "Stats updated successfully!"}, status=200)
+        except Exception as e:
+            return JsonResponse({"error": str(e)}, status=400)
+    return JsonResponse({"error": "Invalid request method"}, status=405)

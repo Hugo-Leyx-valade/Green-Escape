@@ -108,11 +108,6 @@ def saveBestTime(request):
 
 from django.contrib.auth import logout
 
-def logout_view(request):
-    logout(request)
-    return redirect('login-page/')
-
-
 def generate_maze_view(request):
     seed = request.GET.get('seed')
     if not seed:
@@ -259,3 +254,15 @@ def hub(request):
         return render(request, "views/index.html")
     else:
         return redirect('/api/login-page/')
+
+from django.shortcuts import redirect
+from django.contrib.auth import logout
+from django.views.decorators.csrf import csrf_exempt
+from django.http import JsonResponse
+
+@csrf_exempt
+def logout_view(request):
+    if request.method == "POST":
+        logout(request)
+        return JsonResponse({"message": "Déconnexion réussie"}, status=200)
+    return JsonResponse({"error": "Méthode non autorisée"}, status=405)

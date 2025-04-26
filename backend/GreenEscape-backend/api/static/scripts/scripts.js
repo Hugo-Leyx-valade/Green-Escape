@@ -60,7 +60,7 @@ document.addEventListener("DOMContentLoaded", () => {
       maze.forEach(row => row.forEach(cell => {
         const div = document.createElement("div");
         const img = document.createElement("img");
-        img.src = cell === 1 ? "../static/images/mur.png" : "../static/images/sol.png";
+        img.src = cell === 1 ? "/static/images/mur.png" : "/static/images/sol.png";
         img.style.width = "20px";
         img.style.height = "20px";
         div.appendChild(img);
@@ -69,7 +69,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
       const player = document.createElement("img");
       player.id = "player";
-      player.src = "../static/images/BackGuy.png";
+      player.src = "/static/images/BackGuy.png";
       player.style = `width: 20px; height: 20px; position: absolute; z-index: 10;`;
       player.style.left = `${startX * 20}px`;
       player.style.top = `${startY * 20}px`;
@@ -109,7 +109,7 @@ document.addEventListener("keydown", (e) => {
   const [dx, dy, sprite] = sprites[e.key];
   const player = document.getElementById("player");
   if (!player || !window.maze) return;
-  player.src = `../static/images/${sprite}`;
+  player.src = `/static/images/${sprite}`;
 
   if (!window.playerStarted) {
     window.startTime = Date.now();

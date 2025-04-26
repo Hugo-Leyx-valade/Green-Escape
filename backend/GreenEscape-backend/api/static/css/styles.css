@@ -164,6 +164,40 @@ input[type="number"]:focus {
   box-shadow: 0 0 5px #2e8b57;
 }
 
+input[type="password"] {
+    pointer-events: auto;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    padding: 10px;
+    width: 100%;
+    box-sizing: border-box;
+    border-radius: 5px;
+    font-size: 1em;
+}
+
+.modal {
+    display: none; /* Cachée par défaut */
+    position: fixed;
+    z-index: 1000; /* Assurez-vous que la modale est au-dessus des autres éléments */
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.5); /* Fond semi-transparent */
+}
+
+.modal-content {
+    position: relative; /* Assurez-vous que le contenu est bien positionné */
+    z-index: 1001; /* Assurez-vous que le contenu est au-dessus du fond semi-transparent */
+    background-color: #fff;
+    margin: 10% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 50%;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
 
 footer{
   text-align: center;

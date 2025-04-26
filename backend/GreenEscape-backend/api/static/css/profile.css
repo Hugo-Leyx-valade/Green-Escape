@@ -1,61 +1,79 @@
+/* Conteneur principal */
 .profileContainer {
     display: grid;
     grid-template-columns: repeat(6, 1fr);
-    grid-template-rows: repeat(6, 1fr);
+    grid-template-rows: repeat(6, auto);
     grid-column-gap: 0px;
-    grid-row-gap: 20px;
+    grid-row-gap: 20px; /* Espacement vertical entre les sections */
     padding: 20px;
+    background-color: #f9f9f9; /* Couleur de fond douce */
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Ombre légère */
+    max-width: 1200px;
+    margin: 20px auto; /* Centrer la page */
 }
 
+/* En-tête du profil */
 .profileHeader {
     grid-area: 1 / 2 / 2 / 6;
     display: flex;
     align-items: center;
     justify-content: center;
+    text-align: center;
+    font-size: 2.5em;
+    font-weight: bold;
+    color: rgb(89, 187, 97);
+    margin-bottom: 10px;
 }
 
-.profileAvatar {
-    grid-area: 2 / 3 / 4 / 5;
+/* Statistiques */
+.profileStats {
+    grid-area: 2 / 2 / 3 / 6;
     display: flex;
     justify-content: center;
     align-items: center;
-}
-
-.profileAvatar img {
-    width: 200px;
-    height: 200px;
-    border-radius: 50%;
-    border: 3px solid rgb(89, 187, 97);
-    object-fit: cover;
-}
-
-.profileStats {
-    grid-area: 4 / 2 / 6 / 6;
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 20px;
+    gap: 20px; /* Espacement entre les cartes */
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .statCard {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
     border: 2px solid rgb(89, 187, 97);
     border-radius: 10px;
     padding: 15px;
     text-align: center;
     background-color: rgba(89, 187, 97, 0.1);
+    min-width: 150px;
+    max-width: 200px;
+    height: 150px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.statCard:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
 }
 
 .statCard h3 {
     color: rgb(89, 187, 97);
     margin-bottom: 10px;
-    font-size: 2em;
-}
-
-.statCard p {
     font-size: 1.5em;
 }
 
+.statCard p {
+    font-size: 1.2em;
+    color: #333;
+}
+
+/* Boutons d'action */
 .profileActions {
-    grid-area: 6 / 3 / 7 / 5;
+    grid-area: 3 / 2 / 4 / 6;
     display: flex;
     justify-content: center;
     gap: 20px;
@@ -70,9 +88,60 @@
     cursor: pointer;
     font-family: "Jersey 15", sans-serif;
     letter-spacing: 2px;
-    transition: background-color 0.3s ease;
+    transition: background-color 0.3s ease, transform 0.3s ease;
 }
 
 .editProfileButton:hover {
     background-color: #2e8b57;
+    transform: scale(1.05);
+}
+
+/* Fenêtre modale */
+.modal {
+    display: none; /* Cachée par défaut */
+    position: fixed;
+    z-index: 1000; /* Assurez-vous que la modale est au-dessus des autres éléments */
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.5); /* Fond semi-transparent */
+}
+
+.modal-content {
+    position: relative; /* Assurez-vous que le contenu est bien positionné */
+    z-index: 1001; /* Assurez-vous que le contenu est au-dessus du fond semi-transparent */
+    background-color: #fff;
+    margin: 10% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 50%;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.close-button {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.close-button:hover,
+.close-button:focus {   
+    color: black;
+    text-decoration: none;
+}
+
+#newPassword {
+    pointer-events: auto; /* Assurez-vous que les interactions sont activées */
+    background-color: #fff; /* Assurez-vous que le champ est visible */
+    border: 1px solid #ccc; /* Ajoutez une bordure pour le rendre visible */
+    padding: 10px;
+    width: 100%; /* Ajustez la largeur si nécessaire */
+    box-sizing: border-box;
+    border-radius: 5px; /* Ajoutez un arrondi pour un style cohérent */
+    font-size: 1em; /* Taille de police lisible */
 }

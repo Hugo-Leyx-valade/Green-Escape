@@ -119,32 +119,56 @@ document.addEventListener("keydown", (e) => {
 
   const isIntersection = (x, y) => [[0,1],[1,0],[0,-1],[-1,0]].reduce((c, [dx,dy]) => c + (window.maze[y+dy]?.[x+dx] === 0 ? 1 : 0), 0) >= 3;
 
-  const afficherScoreboard = (elapsed) => {
+  const afficherScoreboard = async (elapsed) => {
     const scoresDiv = document.querySelector(".scoresDiv");
     const container = document.getElementById("maze-container");
     if (container) {
-      container.style.margin = "0";
-      container.style.transform = "scale(0.6) translate(-20%, -20%)";
-      container.style.transition = "transform 0.5s ease-in-out";
+        container.style.margin = "0";
+        container.style.transform = "scale(0.6) translate(-20%, -20%)";
+        container.style.transition = "transform 0.5s ease-in-out";
     }
 
     scoresDiv.innerHTML = "<h1>Scores</h1>";
     scoresDiv.style.display = "block";
 
-    const allScores = [...(window.algoScores || []).map(([algo, t]) => ({ name: algo, time: t * 25000, isPlayer: false })),
+    const allScores = [...(window.algoScores || []).map(([algo, t]) => ({ name: algo, time: t * 25000, isPlayer: false })), 
                        { name: username, time: parseFloat(elapsed), isPlayer: true }];
     allScores.sort((a, b) => a.time - b.time);
 
+    let algosBeaten = 0;
     allScores.forEach((entry, i) => {
-      const div = document.createElement("div");
-      div.className = "scoreEntry";
-      div.innerHTML = `
-        <span class="rank">${entry.isPlayer ? "⭐" : `#${i+1}`}</span>
-        <span class="algo">${entry.name}</span>
-        <span class="time">${entry.time.toFixed(2)} s</span>
-      `;
-      scoresDiv.appendChild(div);
+        const div = document.createElement("div");
+        div.className = "scoreEntry";
+        div.innerHTML = `
+            <span class="rank">${entry.isPlayer ? "⭐" : `#${i + 1}`}</span>
+            <span class="algo">${entry.name}</span>
+            <span class="time">${entry.time.toFixed(2)} s</span>
+        `;
+        scoresDiv.appendChild(div);
+
+        // Compter les algorithmes battus
+        if (!entry.isPlayer && entry.time > parseFloat(elapsed)) {
+            algosBeaten++;
+        }
     });
+
+    // Mettre à jour les statistiques du joueur
+    try {
+        const response = await fetch("/api/update-stats/", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "X-CSRFToken": document.querySelector('meta[name="csrf-token"]').getAttribute("content"),
+            },
+            body: JSON.stringify({ medails: algosBeaten }),
+        });
+
+        if (!response.ok) {
+            console.error("Erreur lors de la mise à jour des stats :", await response.json());
+        }
+    } catch (error) {
+        console.error("Erreur lors de la mise à jour des stats :", error);
+    }
   };
 
   const interval = setInterval(() => {

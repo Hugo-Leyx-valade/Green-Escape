@@ -4,6 +4,7 @@ from django.http import JsonResponse
 from django.shortcuts import render, redirect
 from django.contrib.auth.hashers import make_password
 from .models import CustomUser
+from .models import PlayerTimePerSeed
 from api.algorithms import algo
 from api.algorithms import solvers
 from django.contrib.auth.forms import AuthenticationForm
@@ -20,6 +21,8 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login
 from django.http import JsonResponse
 import json
+from django.http import JsonResponse, HttpResponseBadRequest
+
 
 sys.path.append(os.path.join(os.path.dirname(__file__), '../../../algorithms'))
 
@@ -27,6 +30,7 @@ def home(request):
     return JsonResponse({"message": "Bienvenue sur l'API Green Escape"})
 
 User = get_user_model()
+CustomUser = get_user_model()
 
 
 @csrf_exempt
@@ -71,17 +75,38 @@ def login_view(request):
         return JsonResponse({"error": "Méthode non autorisée"}, status=405)
     else:
             return redirect('/')
+    
+@csrf_exempt
+def saveBestTime(request):
+    if not request.user.is_authenticated:
+        return redirect('login-page/')
 
+    if request.method == "POST":
+        try:
+            data = json.loads(request.body)
+            seed = data.get("seed")
+            playerTime = data.get("elapsed")
+            playerId = request.user.id  # Utilisez request.user pour obtenir l'utilisateur actuel
 
+            if seed is None or playerTime is None:
+                return HttpResponseBadRequest("Données manquantes")
 
+            # Enregistrez ou mettez à jour le meilleur temps pour le joueur et la graine
+            player_time, created = PlayerTimePerSeed.objects.update_or_create(
+                player_id=playerId,
+                seed=seed,
+                defaults={'time_played': playerTime}
+            )
+
+            return JsonResponse({"status": "succès", "created": created})
+
+        except json.JSONDecodeError:
+            return JsonResponse({"error": "Requête invalide"}, status=400)
+
+    return HttpResponseBadRequest("Méthode non autorisée")
 
 
 from django.contrib.auth import logout
-
-def logout_view(request):
-    logout(request)
-    return redirect('api/auth-page/')
-
 
 def generate_maze_view(request):
     seed = request.GET.get('seed')
@@ -109,8 +134,7 @@ def generate_maze_view(request):
 def play_screen(request):
     if request.user.is_authenticated:
         print('authentifié')
-        return render(request,'views/index.html')
-        # user is not authenticated, redirect to login
+        return redirect('/api/hub/')
     else:
         return redirect('/api/login-page/')
 
@@ -148,3 +172,97 @@ def retieveUserData(request):
     users = User.objects.all().values()  # Filtre les champs
     print("username : " , users[request.user.id-1])
     return JsonResponse(users[request.user.id-1])  # Retourne la liste au format JSON
+
+def showScoreboard(request):
+    return render(request, "views/scoreboard.html")
+
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+import json
+
+@csrf_exempt
+def saveMedals(request):
+    if not request.user.is_authenticated:
+        return JsonResponse({"error": "Utilisateur non authentifié"}, status=401)
+
+    if request.method == "POST":
+        try:
+            data = json.loads(request.body)
+            medals = data.get('medals')
+            print("medals:", medals)
+            playerId = request.user.id
+
+            if playerId and medals is not None:
+                User.objects.update_or_create(
+                    id=playerId,
+                    defaults={'medails': medals}  # ⚠️ assure-toi que "medails" est le bon champ
+                )
+                return JsonResponse({"message": "Médailles sauvegardées avec succès"}, status=201)
+            else:
+                return JsonResponse({"error": "ID utilisateur ou médailles manquantes"}, status=400)
+
+        except json.JSONDecodeError:
+            return JsonResponse({"error": "Format JSON invalide"}, status=400)
+
+    return JsonResponse({"error": "Méthode non autorisée"}, status=405)
+  
+from django.views.decorators.csrf import csrf_exempt
+from django.http import JsonResponse
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth import get_user_model
+
+CustomUser = get_user_model()
+
+@csrf_exempt
+@login_required
+def edit_profile(request):
+    if request.method == "POST":
+        user = request.user
+        response_data = {}
+
+        # Vérifiez si un nouveau username est fourni
+        if "username" in request.POST:
+            new_username = request.POST["username"]
+            # Vérifiez si le username existe déjà
+            if CustomUser.objects.filter(username=new_username).exclude(id=user.id).exists():
+                return JsonResponse({"error": "Username already exists."}, status=400)
+            user.username = new_username
+            response_data["username"] = new_username
+
+        # Vérifiez si un nouveau mot de passe est fourni
+        if "newPassword" in request.POST:
+            new_password = request.POST["newPassword"]
+            user.set_password(new_password)
+            response_data["password"] = "Password updated."
+
+        # Sauvegardez les modifications uniquement si des changements ont été effectués
+        if response_data:
+            user.save()
+            return JsonResponse({"message": "Profile updated successfully!", "data": response_data})
+
+        return JsonResponse({"error": "No changes were made."}, status=400)
+
+    return JsonResponse({"error": "Invalid request"}, status=400)
+
+def scoreboard(request):
+    # Récupérer les 10 joueurs avec le plus de médailles, triés par médailles (descendant) et username (ascendant)
+    top_players = CustomUser.objects.all().order_by('-medails', 'username')[:10]
+    return render(request, "views/scoreboard.html", {"top_players": top_players})
+
+def hub(request):
+    if request.user.is_authenticated:
+        return render(request, "views/index.html")
+    else:
+        return redirect('/api/login-page/')
+
+from django.shortcuts import redirect
+from django.contrib.auth import logout
+from django.views.decorators.csrf import csrf_exempt
+from django.http import JsonResponse
+
+@csrf_exempt
+def logout_view(request):
+    if request.method == "POST":
+        logout(request)
+        return JsonResponse({"message": "Déconnexion réussie"}, status=200)
+    return JsonResponse({"error": "Méthode non autorisée"}, status=405)

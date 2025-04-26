@@ -2,6 +2,7 @@ from django.urls import path, include
 from . import views
 from django.contrib.auth import views as auth_views
 from django.contrib import admin
+from .views import edit_profile
 
 
 
@@ -18,5 +19,8 @@ urlpatterns = [
     path("logout/", views.logout_view, name="logout"),
     path("auth-page/", views.auth_page),
     path("profile/", views.profile),
-    path("data-profile/", views.retieveUserData)
+    path("data-profile/", views.retieveUserData),
+    path("edit-profile/", edit_profile, name="edit-profile"),
+    path("scoreboard/", views.scoreboard, name="scoreboard"),
+    path("hub/", views.hub, name="hub"),
 ]

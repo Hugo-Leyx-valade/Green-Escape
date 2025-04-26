@@ -21,12 +21,28 @@ let username = "Player"; // Valeur par défaut
 })();
 
 document.addEventListener("DOMContentLoaded", () => {
+  const gameDiv = document.querySelector(".gameDiv");
   const replayButton = document.querySelector(".button");
   const seedInput = document.querySelector("#seed");
-  const gameDiv = document.querySelector(".gameDiv");
   const scoresDiv = document.querySelector(".scoresDiv");
 
+  // Ajout d'un message de bienvenue au chargement
+  const welcomeDiv = document.createElement("div");
+  welcomeDiv.id = "welcome";
+  welcomeDiv.innerHTML = `
+    <h1>Welcome in Green Escape !</h1>
+    <h2>Will you be faster than the algorithms? Dive into the maze and prove it!</h2>
+    <img src="/static/images/FrontGuy.png" alt="Avatar" style="width:60px;height:60px;margin-top:10px;">
+  `;
+  welcomeDiv.style.textAlign = "center";
+  welcomeDiv.style.marginTop = "20px";
+  gameDiv.appendChild(welcomeDiv);
+
   replayButton.addEventListener("click", async () => {
+    // Supprimer le message de bienvenue dès qu'on clique sur Play
+    const oldWelcome = document.getElementById("welcome");
+    if (oldWelcome) oldWelcome.remove();
+
     let seed = seedInput.value.trim();
     if (seed && !/^[0-9]+$/.test(seed)) {
       alert("Please enter a numeric seed.");

@@ -77,18 +77,19 @@ def login_view(request):
             return redirect('/')
     
 @csrf_exempt
-def saveBestTime(request):
+def saveBestTime(request, seed):
     if not request.user.is_authenticated:
         return redirect('login-page/')
 
     if request.method == "POST":
         try:
             data = json.loads(request.body)
-            seed = data.get("seed")
             playerTime = data.get("elapsed")
-            playerId = request.user.id  # Utilisez request.user pour obtenir l'utilisateur actuel
+            playerId = request.user.id
 
-            if seed is None or playerTime is None:
+            print("Données reçues dans saveBestTime :", {"seed": seed, "playerTime": playerTime, "playerId": playerId})
+
+            if playerTime is None:
                 return HttpResponseBadRequest("Données manquantes")
 
             # Enregistrez ou mettez à jour le meilleur temps pour le joueur et la graine
@@ -97,6 +98,8 @@ def saveBestTime(request):
                 seed=seed,
                 defaults={'time_played': playerTime}
             )
+
+            print("Enregistrement dans la base de données :", {"player_time": player_time, "created": created})
 
             return JsonResponse({"status": "succès", "created": created})
 

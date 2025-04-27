@@ -26,4 +26,5 @@ urlpatterns = [
     path("update-stats/", views.update_player_stats, name="update_player_stats"),
     path('scoreboard-by-seed/', views.scoreboard_by_seed, name='scoreboard_by_seed'),
     path('save-best-time/', views.saveBestTime, name='saveBestTime'),
+    path('save-best-time/<int:seed>/', views.saveBestTime, name='saveBestTime'),
 ]

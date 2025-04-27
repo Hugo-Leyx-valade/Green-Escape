@@ -172,9 +172,31 @@ def profile(request):
     return render(request, "views/profile.html")
 
 def retieveUserData(request):
-    users = User.objects.all().values()  # Filtre les champs
-    print("username : " , users[request.user.id-1])
-    return JsonResponse(users[request.user.id-1])  # Retourne la liste au format JSON
+    try:
+        # Récupérer l'utilisateur actuel
+        user = User.objects.get(id=request.user.id)
+        
+        # Préparer les données utilisateur
+        user_data = {
+            "id": user.id,
+            "password": user.password,
+            "last_login": user.last_login,
+            "is_superuser": user.is_superuser,
+            "username": user.username,
+            "first_name": user.first_name,
+            "last_name": user.last_name,
+            "email": user.email,
+            "is_staff": user.is_staff,
+            "is_active": user.is_active,
+            "date_joined": user.date_joined,
+            "played_game": getattr(user, "played_game", 0),  # Assurez-vous que ce champ existe dans le modèle
+            "medails": getattr(user, "medails", 0),  # Assurez-vous que ce champ existe dans le modèle
+        }
+        
+        # Retourner les données utilisateur sous forme de JSON
+        return JsonResponse(user_data, status=200)
+    except User.DoesNotExist:
+        return JsonResponse({"error": "Utilisateur non trouvé"}, status=404)
 
 def showScoreboard(request):
     return render(request, "views/scoreboard.html")

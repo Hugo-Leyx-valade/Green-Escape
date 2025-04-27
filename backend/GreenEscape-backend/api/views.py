@@ -92,16 +92,29 @@ def saveBestTime(request, seed):
             if playerTime is None:
                 return HttpResponseBadRequest("Données manquantes")
 
-            # Enregistrez ou mettez à jour le meilleur temps pour le joueur et la graine
-            player_time, created = PlayerTimePerSeed.objects.update_or_create(
-                player_id=playerId,
-                seed=seed,
-                defaults={'time_played': playerTime}
-            )
+            # Chercher si une entrée existe déjà pour ce joueur et cette seed
+            try:
+                existing_time = PlayerTimePerSeed.objects.get(player_id=playerId, seed=seed)
 
-            print("Enregistrement dans la base de données :", {"player_time": player_time, "created": created})
+                # Comparer les temps : si le nouveau est meilleur (plus petit), on met à jour
+                if playerTime < existing_time.time_played:
+                    existing_time.time_played = playerTime
+                    existing_time.save()
+                    print("Temps amélioré, mise à jour :", {"new_time": playerTime})
+                    return JsonResponse({"status": "succès", "updated": True})
+                else:
+                    print("Nouveau temps pas meilleur, pas de mise à jour.")
+                    return JsonResponse({"status": "pas de mise à jour", "updated": False})
 
-            return JsonResponse({"status": "succès", "created": created})
+            except PlayerTimePerSeed.DoesNotExist:
+                # Si aucune entrée, on crée une nouvelle
+                PlayerTimePerSeed.objects.create(
+                    player_id=playerId,
+                    seed=seed,
+                    time_played=playerTime
+                )
+                print("Nouvel enregistrement :", {"new_time": playerTime})
+                return JsonResponse({"status": "succès", "created": True})
 
         except json.JSONDecodeError:
             return JsonResponse({"error": "Requête invalide"}, status=400)

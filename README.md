@@ -29,4 +29,35 @@ Créer un jeu web où l’utilisateur affronte un algorithme de type **A\***, **
 
 ---
 
-pip install -r requirements.txt
+## **🚀 Lancer le projet 🚀**
+
+### <ins>💻 En ligne :</ins>  https://green-escape.onrender.com/api/login-page/
+
+### <ins>💾 En local :</ins>
+
+ 💡Prérequis :
+ - Connexion internet
+ - python
+ - django==3.2
+ - djongo==1.3.6
+ - pymongo==3.12.0
+ - sqlparse==0.2.4
+ - django-cors-headers==3.13.0
+ - djangorestframework
+ - pymongo[srv]
+ - setuptools
+ - legacy-cgi
+
+
+ 
+ cd .\backend\GreenEscape-backend
+ 
+ python -m venv env
+ 
+ Set-ExecutionPolicy Unrestricted -Scope Process
+ 
+ env\Scripts\Activate
+ 
+ python manage.py runserver
+ 
+ Cliquez sur l'addresse http://-.-.-.-:----/

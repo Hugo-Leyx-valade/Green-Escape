@@ -70,34 +70,16 @@
 /* Styles pour les 3 premiers rangs */
 .scoreTable .rank-1 td {
     background-color: gold !important;
-    background: linear-gradient(
-        135deg,
-        #FFD700 0%,
-        #FFEC8B 50%,
-        #FFD700 100%
-    ) !important;
     color: #333;
 }
 
 .scoreTable .rank-2 td {
     background-color: silver !important;
-    background: linear-gradient(
-        135deg,
-        #C0C0C0 0%,
-        #E6E6FA 50%,
-        #C0C0C0 100%
-    ) !important;
     color: #333;
 }
 
 .scoreTable .rank-3 td {
     background-color: #CD7F32 !important;
-    background: linear-gradient(
-        135deg,
-        #CD7F32 0%,
-        #DEB887 50%,
-        #CD7F32 100%
-    ) !important;
     color: #333;
 }
 

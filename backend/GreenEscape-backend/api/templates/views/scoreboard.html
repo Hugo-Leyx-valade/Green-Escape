@@ -114,7 +114,8 @@
                     }
 
                     data.top_players.forEach((player, index) => {
-                        const row = `<tr>
+                        const rankClass = index === 0 ? 'rank-1' : index === 1 ? 'rank-2' : index === 2 ? 'rank-3' : '';
+                        const row = `<tr class="${rankClass}">
                             <td>${index + 1}</td>
                             <td>${player.username}</td>
                             <td>${player.time_played}</td>

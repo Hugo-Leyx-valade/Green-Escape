@@ -24,4 +24,6 @@ urlpatterns = [
     path("scoreboard/", views.scoreboard, name="scoreboard"),
     path("hub/", views.hub, name="hub"),
     path("update-stats/", views.update_player_stats, name="update_player_stats"),
+    path('scoreboard-by-seed/', views.scoreboard_by_seed, name='scoreboard_by_seed'),
+    path('save-best-time/', views.saveBestTime, name='saveBestTime'),
 ]

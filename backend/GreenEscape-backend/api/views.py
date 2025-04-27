@@ -282,3 +282,39 @@ def update_player_stats(request):
         except Exception as e:
             return JsonResponse({"error": str(e)}, status=400)
     return JsonResponse({"error": "Invalid request method"}, status=405)
+
+from django.db.models import Min
+
+from django.contrib.auth import get_user_model
+
+User = get_user_model()
+
+@csrf_exempt
+def scoreboard_by_seed(request):
+    seed = request.GET.get('seed')
+    if not seed:
+        return JsonResponse({"error": "Missing seed"}, status=400)
+
+    try:
+        seed = int(seed)
+    except ValueError:
+        return JsonResponse({"error": "Invalid seed"}, status=400)
+
+    # Récupérer les 10 meilleurs joueurs par temps pour la graine donnée
+    top_players = PlayerTimePerSeed.objects.filter(seed=seed).order_by('time_played')[:10]
+    players_data = []
+
+    for player_time in top_players:
+        try:
+            user = User.objects.get(id=player_time.player_id)  # Récupérer l'utilisateur à partir de l'ID
+            players_data.append({
+                "username": user.username,
+                "time_played": player_time.time_played,
+            })
+        except User.DoesNotExist:
+            players_data.append({
+                "username": f"Unknown (ID: {player_time.player_id})",
+                "time_played": player_time.time_played,
+            })
+
+    return JsonResponse({"seed": seed, "top_players": players_data}, status=200)

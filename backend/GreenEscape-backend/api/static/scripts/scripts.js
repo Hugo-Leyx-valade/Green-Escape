@@ -181,9 +181,36 @@ document.addEventListener("keydown", (e) => {
 
         if (!response.ok) {
             console.error("Erreur lors de la mise à jour des stats :", await response.json());
+        } else {
+            console.log("Statistiques mises à jour avec succès !");
         }
     } catch (error) {
         console.error("Erreur lors de la mise à jour des stats :", error);
+    }
+
+    // Enregistrer le meilleur temps du joueur
+    try {
+        const saveBestTimeResponse = await fetch("/api/save-best-time/", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "X-CSRFToken": document.querySelector('meta[name="csrf-token"]').getAttribute("content"),
+            },
+            body: JSON.stringify({
+                seed: window.seed, // Assurez-vous que la graine est stockée dans window.seed
+                elapsed: parseFloat(elapsed),
+            }),
+        });
+
+        if (!saveBestTimeResponse.ok) {
+            const errorData = await saveBestTimeResponse.json();
+            console.error("Erreur lors de l'enregistrement du meilleur temps :", errorData);
+        } else {
+            const successData = await saveBestTimeResponse.json();
+            console.log("Meilleur temps enregistré avec succès :", successData);
+        }
+    } catch (error) {
+        console.error("Erreur lors de l'enregistrement du meilleur temps :", error);
     }
   };
 

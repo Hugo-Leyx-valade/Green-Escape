@@ -15,8 +15,6 @@
 .scoreboardHeader {
     text-align: center;
     margin-bottom: 20px;
-    font-size: 2em;
-    font-weight: bold;
     color: rgb(89, 187, 97);
 }
 
@@ -34,6 +32,7 @@
     max-width: 1200px; /* Limite la largeur maximale */
     border-collapse: collapse;
     margin: 0 auto; /* Centre le tableau horizontalement */
+    margin-top: 10px;
     font-size: 1em;
     text-align: left;
     border-radius: 10px;
@@ -55,7 +54,8 @@
     padding: 15px;
     text-align: center;
     font-size: 1em;
-    color: #333;
+    color: #023c06;
+    text-shadow: none;
 }
 
 /* Alternance des couleurs pour les rangs au-delà du 3ème */
@@ -76,7 +76,6 @@
         #FFEC8B 50%,
         #FFD700 100%
     ) !important;
-    font-weight: bold;
     color: #333;
 }
 
@@ -88,7 +87,6 @@
         #E6E6FA 50%,
         #C0C0C0 100%
     ) !important;
-    font-weight: bold;
     color: #333;
 }
 
@@ -100,7 +98,6 @@
         #DEB887 50%,
         #CD7F32 100%
     ) !important;
-    font-weight: bold;
     color: #333;
 }
 
@@ -120,10 +117,19 @@
 }
 
 .scoreboardToggle button {
-    margin: 0 10px;
-    padding: 10px 20px;
+    background-color:rgb(89, 187, 97);
+    border: none;
+    border-radius: 3px;
+    color: white;
+    padding: 15px;
+    text-align: center;
+    display: inline-block;
     font-size: 16px;
+    margin: 4px 2px;
     cursor: pointer;
+    font-family: "Jersey 15", sans-serif;
+    letter-spacing: 2px;
+    font-size:x-large;
 }
 
 .scoreboardSection {
@@ -132,4 +138,19 @@
 
 .scoreboardSection.active {
     display: block;
+}
+
+.showButton{
+    background-color:rgb(89, 187, 97);
+    border: none;
+    color: white;
+    padding: 15px;
+    text-align: center;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    font-family: "Jersey 15", sans-serif;
+    letter-spacing: 2px;
+    font-size:x-large;
 }

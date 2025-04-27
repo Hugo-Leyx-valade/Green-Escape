@@ -49,6 +49,9 @@ document.addEventListener("DOMContentLoaded", () => {
       return;
     }
     if (!seed) seed = Math.floor(Math.random() * 10000000);
+    window.seed = seed;
+
+    console.log("Valeur de seed avant l'envoi :", window.seed);
 
     try {
       const res = await fetch(`/api/generate_maze?seed=${seed}`);
@@ -187,22 +190,22 @@ document.addEventListener("keydown", (e) => {
     } catch (error) {
         console.error("Erreur lors de la mise à jour des stats :", error);
     }
-
+    
     // Enregistrer le meilleur temps du joueur
     try {
-        const saveBestTimeResponse = await fetch("/api/save-best-time/", {
+        const saveBestTimeResponse = await fetch(`/api/save-best-time/${parseInt(window.seed, 10)}/`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
                 "X-CSRFToken": document.querySelector('meta[name="csrf-token"]').getAttribute("content"),
             },
             body: JSON.stringify({
-                seed: window.seed, // Assurez-vous que la graine est stockée dans window.seed
-                elapsed: parseFloat(elapsed),
+                elapsed: parseFloat(elapsed), // Envoyer uniquement le temps
             }),
         });
 
         if (!saveBestTimeResponse.ok) {
+            console.log(window.seed);
             const errorData = await saveBestTimeResponse.json();
             console.error("Erreur lors de l'enregistrement du meilleur temps :", errorData);
         } else {
@@ -238,4 +241,5 @@ document.addEventListener("keydown", (e) => {
       clearInterval(interval); playerMoving = false;
     }
   }, 50);
+  console.log("Valeur de seed envoyée :", window.seed);
 });

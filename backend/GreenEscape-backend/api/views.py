@@ -92,21 +92,34 @@ def saveBestTime(request, seed):
             if playerTime is None:
                 return HttpResponseBadRequest("Données manquantes")
 
-            # Enregistrez ou mettez à jour le meilleur temps pour le joueur et la graine
-            player_time, created = PlayerTimePerSeed.objects.update_or_create(
-                player_id=playerId,
-                seed=seed,
-                defaults={'time_played': playerTime}
-            )
+            # Vérifie s'il existe déjà un enregistrement pour ce joueur et cette graine
+            try:
+                player_time = PlayerTimePerSeed.objects.get(player_id=playerId, seed=seed)
 
-            print("Enregistrement dans la base de données :", {"player_time": player_time, "created": created})
+                if player_time.time_played is None or playerTime < player_time.time_played:
+                    player_time.time_played = playerTime
+                    player_time.save()
+                    print("Temps mis à jour :", {"nouveau_temps": playerTime})
+                    return JsonResponse({"status": "succès", "updated": True})
+                else:
+                    print("Temps non mis à jour : temps existant meilleur ou égal")
+                    return JsonResponse({"status": "succès", "updated": False, "reason": "existing time is better or equal"})
 
-            return JsonResponse({"status": "succès", "created": created})
+            except PlayerTimePerSeed.DoesNotExist:
+                # Aucun temps existant, on en crée un nouveau
+                PlayerTimePerSeed.objects.create(
+                    player_id=playerId,
+                    seed=seed,
+                    time_played=playerTime
+                )
+                print("Nouveau temps enregistré :", {"playerId": playerId, "seed": seed, "time": playerTime})
+                return JsonResponse({"status": "succès", "created": True})
 
         except json.JSONDecodeError:
             return JsonResponse({"error": "Requête invalide"}, status=400)
 
     return HttpResponseBadRequest("Méthode non autorisée")
+
 
 
 from django.contrib.auth import logout

@@ -42,7 +42,7 @@ Créer un jeu web où l’utilisateur affronte un algorithme de type **A\***, **
 
 
 
-** 🤖 Cloner le projet : **
+##### 🤖 Cloner le projet :
 ``` 
     - git clone https://github.com/Hugo-Leyx-valade/Green-Escape
     - cd green-escape/backend/GreenEscape-backend
@@ -69,7 +69,7 @@ Créer un jeu web où l’utilisateur affronte un algorithme de type **A\***, **
 ## 🤝Contribuer au projet 🤝
 
 ``` 
-- Messages de commit clairs : Description du changement(type)
+Messages de commit clairs : Description du changement(type)
 types possibles : doc, feature, fix, test
 
 git checkout -b votre_branche
@@ -99,7 +99,7 @@ Nous nous occupons des pull request
 ``` 
 Nom	            Contributions
 Hugo        	Déploiement du projet et de la BDD et gestion de cette dernière
-Victor  	    Partie algorithmique du labyrinthe et session de jeu
+Victor          Partie algorithmique du labyrinthe et session de jeu
 Mathieu     	Analyse de l'empreinte carbone et de l'impact écologique du site
 Roland      	Interfaces utilisateurs et implémentations de la communication Joueur-BDD
 ```

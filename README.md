@@ -43,7 +43,8 @@ Créer un jeu web où l’utilisateur affronte un algorithme de type **A\***, **
 
 
 ** 🤖 Cloner le projet : **
-    - git clone https://github.com/votre-utilisateur/green-escape.git
+``` 
+    - git clone https://github.com/Hugo-Leyx-valade/Green-Escape
     - cd green-escape/backend/GreenEscape-backend
     
     - python -m venv env
@@ -62,11 +63,12 @@ Créer un jeu web où l’utilisateur affronte un algorithme de type **A\***, **
     
     - python manage.py runserver
     - Cliquez sur l'addresse http://-.-.-.-:----/
-
+```
 ---
 
 ## 🤝Contribuer au projet 🤝
 
+``` 
 - Messages de commit clairs : Description du changement(type)
 types possibles : doc, feature, fix, test
 
@@ -75,6 +77,7 @@ git add .
 git commit -m "Description du changement(type)"
 git push origin votre_branche
 Nous nous occupons des pull request
+```
 
 ---
 
@@ -93,8 +96,10 @@ Nous nous occupons des pull request
 ---
 
 ## 📚Historique des contributions
+``` 
 Nom	            Contributions
 Hugo        	Déploiement du projet et de la BDD et gestion de cette dernière
 Victor  	    Partie algorithmique du labyrinthe et session de jeu
 Mathieu     	Analyse de l'empreinte carbone et de l'impact écologique du site
 Roland      	Interfaces utilisateurs et implémentations de la communication Joueur-BDD
+```

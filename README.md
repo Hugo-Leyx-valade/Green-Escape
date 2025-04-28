@@ -37,27 +37,64 @@ Créer un jeu web où l’utilisateur affronte un algorithme de type **A\***, **
 
  💡Prérequis :
  - Connexion internet
- - python
- - django==3.2
- - djongo==1.3.6
- - pymongo==3.12.0
- - sqlparse==0.2.4
- - django-cors-headers==3.13.0
- - djangorestframework
- - pymongo[srv]
- - setuptools
- - legacy-cgi
+ - Python 3.8 ou supérieur
+ - Pip 
 
 
- 
- cd .\backend\GreenEscape-backend
- 
- python -m venv env
- 
- Set-ExecutionPolicy Unrestricted -Scope Process
- 
- env\Scripts\Activate
- 
- python manage.py runserver
- 
- Cliquez sur l'addresse http://-.-.-.-:----/
+
+** 🤖 Cloner le projet : **
+    - git clone https://github.com/votre-utilisateur/green-escape.git
+    - cd green-escape/backend/GreenEscape-backend
+    
+    - python -m venv env
+    - Set-ExecutionPolicy Unrestricted -Scope Process
+    - env\Scripts\Activate
+
+    - pip install django==3.2
+    - pip install djongo==1.3.6
+    - pip install pymongo==3.12.0
+    - pip install sqlparse==0.2.4
+    - pip install django-cors-headers==3.13.0
+    - pip install djangorestframework
+    - pip install pymongo[srv]
+    - pip install setuptools
+    - pip install legacy-cgi
+    
+    - python manage.py runserver
+    - Cliquez sur l'addresse http://-.-.-.-:----/
+
+---
+
+## 🤝Contribuer au projet 🤝
+
+- Messages de commit clairs : Description du changement(type)
+types possibles : doc, feature, fix, test
+
+git checkout -b votre_branche
+git add .
+git commit -m "Description du changement(type)"
+git push origin votre_branche
+Nous nous occupons des pull request
+
+---
+
+## 📝Description des fonctionnalités
+1. Utilisateurs
+- Inscription, connexion et déconnexion.
+- Modification du profil utilisateur.
+- Affichage des statistiques personnelles (médailles, parties jouées).
+2. Jeu
+- Génération dynamique de labyrinthes basés sur une seed aléatoire.
+- Résolution des labyrinthes avec différents algorithmes (A*, Dijkstra, BFS).
+3. Classements et scores
+- Classement global des joueurs basé sur les médailles.
+- Enregistrement des meilleurs temps par seed.
+
+---
+
+## 📚Historique des contributions
+Nom	            Contributions
+Hugo        	Déploiement du projet et de la BDD et gestion de cette dernière
+Victor  	    Partie algorithmique du labyrinthe et session de jeu
+Mathieu     	Analyse de l'empreinte carbone et de l'impact écologique du site
+Roland      	Interfaces utilisateurs et implémentations de la communication Joueur-BDD
